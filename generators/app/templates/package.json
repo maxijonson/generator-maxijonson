@@ -1,0 +1,34 @@
+{
+    "name": "<%= appname %>",
+    "version": "1.0.0",
+    "description": "",
+    "main": "dist/index.js",
+    "module": "dist/esm/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "start": "ts-node src/index.ts",
+        "watch": "nodemon",
+        "clean": "rm -rf dist",
+        "build": "npm-run-all clean build:cjs build:esm",
+        "build:cjs": "tsc -p tsconfig.prod.json --declaration --declarationMap --module CommonJS --outDir dist",
+        "build:esm": "tsc -p tsconfig.prod.json"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/maxijonson/<%= appname %>.git"
+    },
+    "keywords": [],
+    "files": [
+        "dist"
+    ],
+    "author": "Tristan Chin",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/maxijonson/<%= appname %>/issues"
+    },
+    "homepage": "https://github.com/maxijonson/<%= appname %>#readme",
+    "engines": {
+        "node": "16.x"
+    },
+    "peerDependencies": {}
+}

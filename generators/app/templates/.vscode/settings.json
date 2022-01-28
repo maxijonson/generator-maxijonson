@@ -1,0 +1,21 @@
+{
+    "files.eol": "\n",
+    "eslint.validate": [
+        "javascript",
+        "typescript",
+    ],
+    "workbench.colorCustomizations": {
+        "tab.activeBackground": "#272822",
+        "tab.activeForeground": "#FFFCF2",
+        "activityBarBadge.background": "#007ACC",
+        "activityBar.background": "#272822",
+        "statusBar.background": "#414339",
+        "activityBar.foreground": "#F8F8F2",
+        "titleBar.activeBackground": "#1E1F1C"
+    },
+    "git.autofetch": false,
+    "[javascriptreact]": { "editor.autoClosingBrackets": "languageDefined" },
+    "[typescriptreact]": { "editor.autoClosingBrackets": "languageDefined" },
+    "[javascript]": { "editor.autoClosingBrackets": "languageDefined" },
+    "[typescript]": { "editor.autoClosingBrackets": "languageDefined" }
+}

@@ -1,0 +1,49 @@
+{
+    "name": "generator-maxijonson",
+    "version": "1.0.0",
+    "description": "My (MaxiJonson) personnal and highly opinionated generator. I use this to kickstart personnal projects. Might not be suitable for everyone!",
+    "main": "lib/generators/app/index.js",
+    "scripts": {
+        "clean": "rm -rf lib test/*",
+        "compile": "tsc",
+        "copy-files": "copyfiles --all -e \"generators/*/*.ts\" \"generators/**/*\" lib",
+        "build": "npm-run-all clean compile copy-files",
+        "test": "npm run build && npm link"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/maxijonson/generator-maxijonson.git"
+    },
+    "keywords": [
+        "yeoman-generator"
+    ],
+    "files": [
+        "lib/generators"
+    ],
+    "author": "Tristan Chin",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/maxijonson/generator-maxijonson/issues"
+    },
+    "homepage": "https://github.com/maxijonson/generator-maxijonson#readme",
+    "dependencies": {
+        "chalk": "^4.1.2",
+        "copyfiles": "^2.4.1",
+        "lodash": "^4.17.21",
+        "validate-npm-package-name": "^3.0.0",
+        "which": "^2.0.2",
+        "yeoman-generator": "^5.6.1"
+    },
+    "devDependencies": {
+        "@types/lodash": "^4.14.178",
+        "@types/validate-npm-package-name": "^3.0.3",
+        "@types/which": "^2.0.1",
+        "@types/yeoman-generator": "^5.2.8",
+        "@typescript-eslint/eslint-plugin": "^5.10.1",
+        "@typescript-eslint/parser": "^5.10.1",
+        "eslint": "^8.7.0",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-prettier": "^4.0.0",
+        "prettier": "^2.5.1"
+    }
+}
