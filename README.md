@@ -10,10 +10,10 @@ This generator is not meant to be used by anyone but me. It is only used for my 
 
 ### App (default)
 
-Creates a basic TypeScript + Node application. This is meant to replace `npm init`, so you should run this in an empty directory where your project will live. This is done to work well with my usual routine which is usually to create a project folder using `gh repo create`, `cd` into it and run `npm init` in it.
+Creates a basic TypeScript + Node application. This generator creates a project folder, so no need to create it manually.
 
 #### Usage
 
 ```bash
-yo maxijonson
+yo maxijonson [project-name]
 ```
