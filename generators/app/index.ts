@@ -264,7 +264,8 @@ class GeneratorApp extends Generator {
 
         this.fs.copyTpl(
             this.templatePath(".devcontainer"),
-            this.destinationPath(".devcontainer")
+            this.destinationPath(".devcontainer"),
+            { appname: this.appname }
         );
     }
 
@@ -325,6 +326,7 @@ class GeneratorApp extends Generator {
             "ts-node",
             "npm-run-all",
             "nodemon",
+            "@types/lodash",
         ];
 
         if (this.features.prettier) {
