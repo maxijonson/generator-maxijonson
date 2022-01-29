@@ -155,7 +155,6 @@ class GeneratorApp extends Generator {
                 "repo",
                 "create",
                 this.appname,
-                "--confirm",
                 "--private",
             ]);
             this.destinationRoot(this.appname);
