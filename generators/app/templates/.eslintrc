@@ -30,18 +30,6 @@
         }
     },
     "rules": {
-        "@typescript-eslint/ban-types": "off",
-        "@typescript-eslint/explicit-function-return-type": "off",
-        "@typescript-eslint/explicit-module-boundary-types": "off",
-        "@typescript-eslint/interface-name-prefix": "off",
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-object-literal-type-assertion": "off",
-        "@typescript-eslint/no-shadow": [
-            "error",
-            {
-                "allow": ["theme"]
-            }
-        ],
         "@typescript-eslint/no-unused-vars": [
             "warn",
             {
@@ -49,9 +37,6 @@
                 "ignoreRestSiblings": true
             }
         ],
-        "@typescript-eslint/no-use-before-define": "off",
-        "class-methods-use-this": "off",
-        "consistent-return": "off",
         "eqeqeq": ["warn", "always"],
         "import/extensions": [
             "error",
@@ -72,24 +57,12 @@
                 "allow": ["warn", "error", "info"]
             }
         ],
-        "no-new": "off",
         "no-param-reassign": [
             "warn",
             {
                 "props": false
             }
         ],
-        "no-plusplus": [
-            "error",
-            {
-                "allowForLoopAfterthoughts": true
-            }
-        ],
-        "no-restricted-globals": "off",
-        "no-restricted-syntax": "off",
-        "no-shadow": "off",
-        "no-underscore-dangle": "off",
-        "no-use-before-define": "off",
         "spaced-comment": [
             "warn",
             "always",
