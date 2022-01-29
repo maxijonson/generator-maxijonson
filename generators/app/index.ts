@@ -224,7 +224,8 @@ class GeneratorApp extends Generator {
 
         this.fs.copyTpl(
             this.templatePath("nodemon.json"),
-            this.destinationPath("nodemon.json")
+            this.destinationPath("nodemon.json"),
+            { devcontainer: this.features.devcontainer }
         );
     }
 
