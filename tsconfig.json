@@ -33,5 +33,6 @@
         // "listFiles": true, // Prints the files that are being compiled.
         // "listEmittedFiles": true, // Prints the files that are emitted.
     },
-    "exclude": ["generators/*/templates", "generator.template.ts"]
+    "include": ["generators/**/*.ts"],
+    "exclude": ["generators/*/templates"]
 }

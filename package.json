@@ -4,11 +4,12 @@
     "description": "My (MaxiJonson) personnal and highly opinionated generator. I use this to kickstart personnal projects. Might not be suitable for everyone!",
     "main": "lib/generators/app/index.js",
     "scripts": {
-        "clean": "rm -rf lib test/*",
+        "clean": "rm -rf lib test/* generator-maxijonson-release.tgz package",
         "tsc": "tsc",
         "copy-files": "copyfiles --all -e \"generators/*/*.ts\" \"generators/**/*\" lib",
         "build": "npm-run-all clean tsc copy-files",
         "test": "npm run build && npm link",
+        "test:release": "npm run build && npm pack && mv generator-maxijonson-*.tgz generator-maxijonson-release.tgz && tar -xzf generator-maxijonson-release.tgz && rm generator-maxijonson-release.tgz",
         "release": "npm run build && np"
     },
     "repository": {
