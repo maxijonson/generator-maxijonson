@@ -1,6 +1,6 @@
 {
     "name": "generator-maxijonson",
-    "version": "1.0.0",
+    "version": "0.0.0",
     "description": "My (MaxiJonson) personnal and highly opinionated generator. I use this to kickstart personnal projects. Might not be suitable for everyone!",
     "main": "lib/generators/app/index.js",
     "scripts": {
@@ -9,7 +9,7 @@
         "copy-files": "copyfiles --all -e \"generators/*/*.ts\" \"generators/**/*\" lib",
         "build": "npm-run-all clean tsc copy-files",
         "test": "npm run build && npm link",
-        "np": "npm run build && np --no-tests --no-yarn"
+        "release": "npm run build && np"
     },
     "repository": {
         "type": "git",
