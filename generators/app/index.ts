@@ -11,6 +11,7 @@ interface Answers {
         | "prettier"
         | "eslint"
         | "devcontainer"
+        | "tests"
         | "settings"
         | "launch"
     )[];
@@ -26,6 +27,7 @@ const FEATURES = {
     prettier: "prettier",
     eslint: "eslint",
     devcontainer: "devcontainer",
+    tests: "tests",
     settings: "settings",
     launch: "launch",
 } as const;
@@ -91,6 +93,11 @@ class GeneratorApp extends Generator {
                     {
                         name: "Dev Container",
                         value: FEATURES.devcontainer,
+                        checked: false,
+                    },
+                    {
+                        name: "Tests",
+                        value: FEATURES.tests,
                         checked: false,
                     },
                     {
@@ -189,7 +196,11 @@ class GeneratorApp extends Generator {
         this.fs.copyTpl(
             this.templatePath(".gitignore"),
             this.destinationPath(".gitignore"),
-            { settings: this.features.settings, launch: this.features.launch }
+            {
+                settings: this.features.settings,
+                launch: this.features.launch,
+                tests: this.features.tests,
+            }
         );
 
         this.fs.copyTpl(
@@ -197,16 +208,18 @@ class GeneratorApp extends Generator {
             this.destinationPath(".gitattributes")
         );
 
-        this.fs.copyTpl(this.templatePath("src"), this.destinationPath("src"));
-
         this.fs.copyTpl(
-            this.templatePath("tsconfig.json"),
-            this.destinationPath("tsconfig.json")
+            this.templatePath("src/index.ts"),
+            this.destinationPath("src/index.ts")
         );
 
-        this.fs.copyTpl(
-            this.templatePath("tsconfig.prod.json"),
-            this.destinationPath("tsconfig.prod.json")
+        [
+            "tsconfig.base.json",
+            "tsconfig.json",
+            "tsconfig.cjs.json",
+            "tsconfig.prod.json",
+        ].forEach((file) =>
+            this.fs.copyTpl(this.templatePath(file), this.destinationPath(file))
         );
 
         this.fs.copyTpl(
@@ -225,7 +238,8 @@ class GeneratorApp extends Generator {
 
         this.fs.copyTpl(
             this.templatePath(".prettierignore"),
-            this.destinationPath(".prettierignore")
+            this.destinationPath(".prettierignore"),
+            { tests: this.features.tests }
         );
     }
 
@@ -240,7 +254,8 @@ class GeneratorApp extends Generator {
 
         this.fs.copyTpl(
             this.templatePath(".eslintignore"),
-            this.destinationPath(".eslintignore")
+            this.destinationPath(".eslintignore"),
+            { tests: this.features.tests }
         );
     }
 
@@ -250,6 +265,20 @@ class GeneratorApp extends Generator {
         this.fs.copyTpl(
             this.templatePath(".devcontainer"),
             this.destinationPath(".devcontainer")
+        );
+    }
+
+    _testsInit() {
+        if (!this.features.tests) return;
+
+        this.fs.copyTpl(
+            this.templatePath("src/index.test.ts"),
+            this.destinationPath("src/index.test.ts")
+        );
+
+        this.fs.copyTpl(
+            this.templatePath("jest.config.ts"),
+            this.destinationPath("jest.config.ts")
         );
     }
 
@@ -275,6 +304,7 @@ class GeneratorApp extends Generator {
         this._prettierInit();
         this._eslintInit();
         this._devcontainerInit();
+        this._testsInit();
         this._vscodeInit();
     }
 
@@ -286,7 +316,7 @@ class GeneratorApp extends Generator {
         this.fs.copyTpl(
             this.templatePath("package.json"),
             this.destinationPath("package.json"),
-            { appname: this.appname }
+            { appname: this.appname, tests: this.features.tests }
         );
 
         const dependencies: string[] = ["lodash"];
@@ -300,6 +330,7 @@ class GeneratorApp extends Generator {
         if (this.features.prettier) {
             devDependencies.push("prettier");
         }
+
         if (this.features.eslint) {
             devDependencies.push(
                 "eslint",
@@ -316,6 +347,10 @@ class GeneratorApp extends Generator {
                     "eslint-config-prettier"
                 );
             }
+        }
+
+        if (this.features.tests) {
+            devDependencies.push("jest", "@types/jest", "ts-jest");
         }
 
         await this.addDependencies(dependencies);
