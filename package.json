@@ -1,6 +1,6 @@
 {
     "name": "generator-maxijonson",
-    "version": "0.0.0",
+    "version": "1.0.0",
     "description": "My (MaxiJonson) personnal and highly opinionated generator. I use this to kickstart personnal projects. Might not be suitable for everyone!",
     "main": "lib/generators/app/index.js",
     "scripts": {
