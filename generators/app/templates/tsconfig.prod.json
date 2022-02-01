@@ -1,5 +1,5 @@
 {
-    "extends": "./tsconfig.json", // module: ESM, outDir: dist/esm
+    "extends": "./tsconfig.esm.json",
     "compilerOptions": {
         "incremental": false,
         "removeComments": true,

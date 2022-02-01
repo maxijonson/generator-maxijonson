@@ -31,10 +31,5 @@
         // "listFiles": true, // Prints the files that are being compiled.
         // "listEmittedFiles": true, // Prints the files that are emitted.
     },
-    "ts-node": {
-        "compilerOptions": {
-            "module": "commonjs",
-        }
-    },
     "include": ["src"]
 }

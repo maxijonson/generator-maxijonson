@@ -18,7 +18,7 @@
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "project": "./tsconfig.json",
+        "project": "./tsconfig.cjs.json",
         "sourceType": "module",
         "tsconfigRootDir": "./",
         "extraFileExtensions": [".json"],
@@ -30,13 +30,18 @@
         }
     },
     "rules": {
+        "@typescript-eslint/no-empty-function": "off",
         "@typescript-eslint/no-unused-vars": [
             "warn",
             {
                 "argsIgnorePattern": "^_",
+                "varsIgnorePattern": "^_",
                 "ignoreRestSiblings": true
             }
         ],
+        "max-classes-per-file": "off",
+        "no-useless-constructor": "off",
+        "class-methods-use-this": "off",
         "eqeqeq": ["warn", "always"],
         "import/extensions": [
             "error",

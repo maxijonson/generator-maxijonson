@@ -217,6 +217,7 @@ class GeneratorApp extends Generator {
             "tsconfig.base.json",
             "tsconfig.json",
             "tsconfig.cjs.json",
+            "tsconfig.esm.json",
             "tsconfig.prod.json",
         ].forEach((file) =>
             this.fs.copyTpl(this.templatePath(file), this.destinationPath(file))
@@ -226,6 +227,16 @@ class GeneratorApp extends Generator {
             this.templatePath("nodemon.json"),
             this.destinationPath("nodemon.json"),
             { devcontainer: this.features.devcontainer }
+        );
+
+        this.fs.copyTpl(
+            this.templatePath(".build"),
+            this.destinationPath(".build")
+        );
+
+        this.fs.copyTpl(
+            this.templatePath(".env"),
+            this.destinationPath(".env")
         );
     }
 
@@ -321,7 +332,7 @@ class GeneratorApp extends Generator {
             { appname: this.appname, tests: this.features.tests }
         );
 
-        const dependencies: string[] = ["lodash"];
+        const dependencies: string[] = ["lodash", "dotenv"];
         const devDependencies: string[] = [
             "typescript",
             "ts-node",
