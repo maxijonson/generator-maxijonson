@@ -1,0 +1,5 @@
+{
+    <% if (!tests) { %>"tests": false,<% } %>
+    "yarn": false,
+    "anyBranch": true
+}

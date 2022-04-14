@@ -19,7 +19,7 @@
         "newLine": "LF",
         /* Rules */
         "strict": true,
-        "exactOptionalPropertyTypes": true,
+        "exactOptionalPropertyTypes": false,
         "noFallthroughCasesInSwitch": true,
         "noImplicitAny": true,
         "noImplicitOverride": true,

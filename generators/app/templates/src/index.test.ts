@@ -1,5 +1,5 @@
-import { sum } from ".";
-
-test('adds 1 + 2 to equal 3', () => {
-    expect(sum(1, 2)).toBe(3);
+describe("Test Group", () => {
+    it("Should add 1 and 2 together", () => {
+        expect(1 + 2).toBe(3);
+    });
 });

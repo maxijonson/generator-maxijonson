@@ -4,17 +4,34 @@ import which from "which";
 import chalk from "chalk";
 import _ from "lodash";
 
-interface Answers {
+interface Arguments {
+    name?: string;
+}
+
+interface Options {
+    dependencies?: string[] | string;
+    devDependencies?: string[] | string;
+}
+
+interface ComposedOptions {
+    /** Additionnal features to prompt for. Available in the `features` attribute of this generator after prompting */
+    features?: {
+        name: string;
+        value: string;
+        checked?: boolean;
+        disabled?: boolean;
+    }[];
+    /** Merges into the existing package.json */
+    packageJson?: {
+        [key: string]: unknown;
+    };
+}
+
+export type GeneratorOptions = Arguments & Options & ComposedOptions; // In the end, all available under `this.options`
+
+interface Answers<F> {
     name: string;
-    features: (
-        | "gh"
-        | "prettier"
-        | "eslint"
-        | "devcontainer"
-        | "tests"
-        | "settings"
-        | "launch"
-    )[];
+    features: (keyof typeof FEATURES | keyof F)[];
 }
 
 interface System {
@@ -30,22 +47,31 @@ const FEATURES = {
     tests: "tests",
     settings: "settings",
     launch: "launch",
+    npm: "npm",
 } as const;
+
+type CopyTpl = Generator<GeneratorOptions>["fs"]["copyTpl"];
 
 const npmifyName = (name: string) =>
     name.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase();
 
-class GeneratorApp extends Generator {
-    answers!: Answers;
+class GeneratorApp<
+    F = Record<string, never>
+> extends Generator<GeneratorOptions> {
+    answers!: Answers<F>;
     system!: System;
-    features!: { [key in Answers["features"][0]]: boolean };
+    features!: {
+        [key in Answers<F>["features"][0]]: boolean;
+    };
 
     constructor(
         args: ConstructorParameters<typeof Generator>[0],
-        options: ConstructorParameters<typeof Generator>[1]
+        options: GeneratorOptions
     ) {
         super(args, options);
         this.argument("name", { type: String, required: false });
+        this.option("dependencies", { type: String });
+        this.option("devDependencies", { type: String });
     }
 
     /** Your initialization methods (checking current project state, getting configs, etc) */
@@ -58,7 +84,8 @@ class GeneratorApp extends Generator {
 
     /** Where you prompt users for options (where you'd call `this.prompt()`) */
     async prompting() {
-        this.answers = await this.prompt<Answers>([
+        const composedFeatures = this.options.features ?? [];
+        this.answers = await this.prompt<Answers<F>>([
             {
                 type: "input",
                 name: "name",
@@ -110,6 +137,12 @@ class GeneratorApp extends Generator {
                         value: FEATURES.launch,
                         checked: true,
                     },
+                    {
+                        name: "NPM Publishing",
+                        value: FEATURES.npm,
+                        checked: false,
+                    },
+                    ...composedFeatures,
                 ],
             },
         ]);
@@ -139,14 +172,21 @@ class GeneratorApp extends Generator {
     }
 
     _setAttributes() {
+        const composedFeatures = this.options.features ?? [];
+
         this.appname = this.answers.name;
         this.features = _.keys(FEATURES).reduce((acc, key) => {
-            const k = key as Answers["features"][0];
+            const k = key as keyof typeof FEATURES;
             return {
                 ...acc,
                 [k]: this.answers.features.includes(k),
             };
-        }, {} as { [key in Answers["features"][0]]: boolean });
+        }, {} as typeof this.features);
+
+        composedFeatures.map((f) => {
+            const k = f.value as keyof F;
+            this.features[k] = this.answers.features.includes(k);
+        });
     }
 
     _gitInit() {
@@ -181,19 +221,19 @@ class GeneratorApp extends Generator {
     _repoInit() {
         this.env.cwd = this.destinationPath();
 
-        this.fs.copyTpl(
+        this._copyTpl(
             this.templatePath("LICENSE"),
             this.destinationPath("LICENSE"),
             { year: new Date().getFullYear() }
         );
 
-        this.fs.copyTpl(
+        this._copyTpl(
             this.templatePath("README.md"),
             this.destinationPath("README.md"),
             { appname: this.appname }
         );
 
-        this.fs.copyTpl(
+        this._copyTpl(
             this.templatePath("gitignore"),
             this.destinationPath(".gitignore"),
             {
@@ -203,12 +243,12 @@ class GeneratorApp extends Generator {
             }
         );
 
-        this.fs.copyTpl(
+        this._copyTpl(
             this.templatePath(".gitattributes"),
             this.destinationPath(".gitattributes")
         );
 
-        this.fs.copyTpl(
+        this._copyTpl(
             this.templatePath("src/index.ts"),
             this.destinationPath("src/index.ts")
         );
@@ -220,117 +260,37 @@ class GeneratorApp extends Generator {
             "tsconfig.esm.json",
             "tsconfig.prod.json",
         ].forEach((file) =>
-            this.fs.copyTpl(this.templatePath(file), this.destinationPath(file))
+            this._copyTpl(this.templatePath(file), this.destinationPath(file))
         );
 
-        this.fs.copyTpl(
+        this._copyTpl(
             this.templatePath("nodemon.json"),
             this.destinationPath("nodemon.json"),
             { devcontainer: this.features.devcontainer }
         );
 
-        this.fs.copyTpl(
+        this._copyTpl(
             this.templatePath(".build"),
             this.destinationPath(".build")
         );
 
-        this.fs.copyTpl(
-            this.templatePath(".env"),
-            this.destinationPath(".env")
-        );
+        this._copyTpl(this.templatePath(".env"), this.destinationPath(".env"));
     }
 
-    _prettierInit() {
-        if (!this.features.prettier) return;
-
-        this.fs.copyTpl(
-            this.templatePath(".prettierrc"),
-            this.destinationPath(".prettierrc")
-        );
-
-        this.fs.copyTpl(
-            this.templatePath(".prettierignore"),
-            this.destinationPath(".prettierignore"),
-            { tests: this.features.tests }
-        );
-    }
-
-    _eslintInit() {
-        if (!this.features.eslint) return;
-
-        this.fs.copyTpl(
-            this.templatePath(".eslintrc"),
-            this.destinationPath(".eslintrc"),
-            { prettier: this.features.prettier }
-        );
-
-        this.fs.copyTpl(
-            this.templatePath(".eslintignore"),
-            this.destinationPath(".eslintignore"),
-            { tests: this.features.tests }
-        );
-    }
-
-    _devcontainerInit() {
-        if (!this.features.devcontainer) return;
-
-        this.fs.copyTpl(
-            this.templatePath(".devcontainer"),
-            this.destinationPath(".devcontainer"),
-            { appname: this.appname }
-        );
-    }
-
-    _testsInit() {
-        if (!this.features.tests) return;
-
-        this.fs.copyTpl(
-            this.templatePath("src/index.test.ts"),
-            this.destinationPath("src/index.test.ts")
-        );
-
-        this.fs.copyTpl(
-            this.templatePath("jest.config.ts"),
-            this.destinationPath("jest.config.ts")
-        );
-    }
-
-    _vscodeInit() {
-        if (this.features.settings) {
-            this.fs.copyTpl(
-                this.templatePath(".vscode/settings.json"),
-                this.destinationPath(".vscode/settings.json")
-            );
-        }
-
-        if (this.features.launch) {
-            this.fs.copyTpl(
-                this.templatePath(".vscode/launch.json"),
-                this.destinationPath(".vscode/launch.json")
-            );
-        }
-    }
-
-    /** Where you write the generator specific files (routes, controllers, etc) */
-    writing() {
-        this._repoInit();
-        this._prettierInit();
-        this._eslintInit();
-        this._devcontainerInit();
-        this._testsInit();
-        this._vscodeInit();
-    }
-
-    /** Where conflicts are handled (used internally) */
-    conflicts() {}
-
-    /** Where installations are run (npm, bower) */
-    async install() {
-        this.fs.copyTpl(
+    async _packageInit() {
+        this._copyTpl(
             this.templatePath("package.json"),
             this.destinationPath("package.json"),
-            { appname: this.appname, tests: this.features.tests }
+            {
+                appname: this.appname,
+                tests: this.features.tests,
+                npm: this.features.npm,
+            }
         );
+
+        if (this.options.packageJson) {
+            this.packageJson.merge(this.options.packageJson);
+        }
 
         const dependencies: string[] = ["lodash", "dotenv"];
         const devDependencies: string[] = [
@@ -340,6 +300,24 @@ class GeneratorApp extends Generator {
             "nodemon",
             "@types/lodash",
         ];
+
+        if (this.options.dependencies) {
+            const optsDependencies =
+                typeof this.options.dependencies === "string"
+                    ? this.options.dependencies.split(",").map((d) => d.trim())
+                    : this.options.dependencies;
+            dependencies.push(...optsDependencies);
+        }
+
+        if (this.options.devDependencies) {
+            const optsDevDependencies =
+                typeof this.options.devDependencies === "string"
+                    ? this.options.devDependencies
+                          .split(",")
+                          .map((d) => d.trim())
+                    : this.options.devDependencies;
+            devDependencies.push(...optsDevDependencies);
+        }
 
         if (this.features.prettier) {
             devDependencies.push("prettier");
@@ -367,9 +345,112 @@ class GeneratorApp extends Generator {
             devDependencies.push("jest", "@types/jest", "ts-jest");
         }
 
+        if (this.features.npm) {
+            devDependencies.push("np");
+        }
+
         await this.addDependencies(dependencies);
         await this.addDevDependencies(devDependencies);
     }
+
+    _prettierInit() {
+        if (!this.features.prettier) return;
+
+        this._copyTpl(
+            this.templatePath(".prettierrc"),
+            this.destinationPath(".prettierrc")
+        );
+
+        this._copyTpl(
+            this.templatePath(".prettierignore"),
+            this.destinationPath(".prettierignore"),
+            { tests: this.features.tests }
+        );
+    }
+
+    _eslintInit() {
+        if (!this.features.eslint) return;
+
+        this._copyTpl(
+            this.templatePath(".eslintrc"),
+            this.destinationPath(".eslintrc"),
+            { prettier: this.features.prettier }
+        );
+
+        this._copyTpl(
+            this.templatePath(".eslintignore"),
+            this.destinationPath(".eslintignore"),
+            { tests: this.features.tests }
+        );
+    }
+
+    _devcontainerInit() {
+        if (!this.features.devcontainer) return;
+
+        this._copyTpl(
+            this.templatePath(".devcontainer"),
+            this.destinationPath(".devcontainer"),
+            { appname: this.appname }
+        );
+    }
+
+    _testsInit() {
+        if (!this.features.tests) return;
+
+        this._copyTpl(
+            this.templatePath("src/index.test.ts"),
+            this.destinationPath("src/index.test.ts")
+        );
+
+        this._copyTpl(
+            this.templatePath("jest.config.ts"),
+            this.destinationPath("jest.config.ts")
+        );
+    }
+
+    _vscodeInit() {
+        if (this.features.settings) {
+            this._copyTpl(
+                this.templatePath(".vscode/settings.json"),
+                this.destinationPath(".vscode/settings.json")
+            );
+        }
+
+        if (this.features.launch) {
+            this._copyTpl(
+                this.templatePath(".vscode/launch.json"),
+                this.destinationPath(".vscode/launch.json")
+            );
+        }
+    }
+
+    _npInit() {
+        if (!this.features.npm) return;
+
+        this._copyTpl(
+            this.templatePath(".np-config.json"),
+            this.destinationPath(".np-config.json"),
+            { tests: this.features.tests }
+        );
+    }
+
+    /** Where you write the generator specific files (routes, controllers, etc) */
+    async writing() {
+        this._repoInit();
+        await this._packageInit();
+        this._prettierInit();
+        this._eslintInit();
+        this._devcontainerInit();
+        this._testsInit();
+        this._vscodeInit();
+        this._npInit();
+    }
+
+    /** Where conflicts are handled (used internally) */
+    conflicts() {}
+
+    /** Where installations are run (npm, bower) */
+    install() {}
 
     /** Called last, cleanup, say good bye, etc */
     end() {
@@ -380,6 +461,18 @@ class GeneratorApp extends Generator {
             "--loglevel",
             "silent",
         ]);
+    }
+
+    /** Same as the standard copyTpl method, but only if the file does not already exist */
+    _copyTpl(
+        from: Parameters<CopyTpl>[0],
+        to: Parameters<CopyTpl>[1],
+        context?: Parameters<CopyTpl>[2],
+        templateOptions?: Parameters<CopyTpl>[3],
+        copyOptions?: Parameters<CopyTpl>[4]
+    ) {
+        if (this.fs.exists(to)) return;
+        this.fs.copyTpl(from, to, context, templateOptions, copyOptions);
     }
 }
 
