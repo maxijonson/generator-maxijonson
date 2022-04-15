@@ -79,11 +79,30 @@ class Mantine extends Framework {
         this.generator.dependencies.push(...this.answers.packages);
     }
 
-    override writing(): void | Promise<void> {
-        this.generator.fs.copyTpl(
-            this.generator.templatePath(FOLDER, "src/index.ts"),
-            this.generator.destinationPath("src/index.ts")
+    repoInit() {
+        this.generator.copyTemplate(
+            this.generator.templatePath(FOLDER, "src"),
+            this.generator.destinationPath("src")
         );
+    }
+
+    packageInit() {
+        this.dependenciesInit();
+
+        const packageJson = this.generator.generatorApp.options.packageJson!;
+        const scripts: { [key: string]: string } = packageJson.scripts ?? {};
+        if (!packageJson.scripts) {
+            packageJson.scripts = scripts;
+        }
+        scripts.start = "vite serve src";
+        scripts.preview = "vite preview";
+        scripts.build =
+            "npm-run-all clean build:esm build:cjs build:types && vite build";
+    }
+
+    override writing(): void | Promise<void> {
+        this.packageInit();
+        this.repoInit();
     }
 }
 

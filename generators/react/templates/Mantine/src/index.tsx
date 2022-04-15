@@ -1,5 +1,10 @@
-import { Button } from '@mantine/core';
+import React, { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import App from "./components/App/App";
 
-export function MyApp() {
-  return <Button>Hello world!</Button>;
-}
+const root = createRoot(document.getElementById("root")!);
+root.render(
+    <StrictMode>
+        <App />
+    </StrictMode>
+);

@@ -1,11 +1,17 @@
 import Generator from "yeoman-generator";
-import GeneratorApp, { GeneratorOptions } from "../app";
+import GeneratorApp, { GeneratorOptions as GeneratorAppOptions } from "../app";
 import Framework from "./frameworks/Framework";
 import fs from "fs";
 
-interface Options {
+interface Arguments {
     name?: string;
 }
+
+interface Options {
+    framework?: string;
+}
+
+type GeneratorOptions = Arguments & Options;
 
 interface Answers {
     framework: number;
@@ -13,30 +19,33 @@ interface Answers {
 
 const FEATURES = {} as const;
 
-class GeneratorReact extends Generator<Options> {
-    private generatorApp!: GeneratorApp<typeof FEATURES>;
-    private features!: typeof this.generatorApp["features"];
-    private framework!: Framework;
-    private frameworks: Framework[] = [];
-    private answers!: Answers;
+class GeneratorReact extends Generator<GeneratorOptions> {
+    generatorApp!: GeneratorApp<typeof FEATURES>;
+    features!: typeof this.generatorApp["features"];
+    framework!: Framework;
+    frameworks: Framework[] = [];
+    answers!: Answers;
 
     dependencies: string[] = [];
     devDependencies: string[] = [];
 
     constructor(
         args: ConstructorParameters<typeof Generator>[0],
-        options: Options
+        options: Arguments
     ) {
         super(args, options);
         this.argument("name", { type: String, required: false });
+        this.option("framework", { type: String });
 
-        const generatorOptions: GeneratorOptions = {
+        const generatorAppOptions: GeneratorAppOptions = {
             name: this.options.name,
+            packageJson: {},
+            react: true,
         };
 
         this.generatorApp = this.composeWith(
             require.resolve("../app"),
-            generatorOptions,
+            generatorAppOptions,
             true
         ) as GeneratorApp<typeof FEATURES>;
     }
@@ -58,6 +67,14 @@ class GeneratorReact extends Generator<Options> {
 
     /** Where you prompt users for options (where you'd call `this.prompt()`) */
     async prompting() {
+        const optionFramework = this.options.framework;
+        if (optionFramework) {
+            this.framework = this.frameworks.find(
+                (f) =>
+                    f.getName().toLowerCase() === optionFramework.toLowerCase()
+            ) as Framework;
+        }
+
         this.answers = await this.prompt<Answers>([
             {
                 type: "list",
@@ -67,9 +84,15 @@ class GeneratorReact extends Generator<Options> {
                     name: f.getName(),
                     value: i,
                 })),
+                when: !this.framework,
             },
         ]);
-        this.framework = this.frameworks[this.answers.framework] as Framework;
+
+        if (typeof this.answers.framework === "number") {
+            this.framework = this.frameworks[
+                this.answers.framework
+            ] as Framework;
+        }
 
         await this.framework.prompting();
     }
@@ -80,19 +103,20 @@ class GeneratorReact extends Generator<Options> {
         await this.framework.configuring();
     }
 
-    _viteInit() {
-        this.spawnCommandSync("npm", [
-            "create",
-            "@vitejs/app",
-            "mantine-vite",
-            "--template",
-            "react-ts",
-        ]);
-    }
-
     async _packageInit() {
-        const dependencies: string[] = [...this.dependencies];
-        const devDependencies: string[] = [...this.devDependencies];
+        const dependencies: string[] = [
+            "react",
+            "react-dom",
+            ...this.dependencies,
+        ];
+        const devDependencies: string[] = [
+            "@types/react",
+            "@types/react-dom",
+            "@vitejs/plugin-react",
+            "typescript",
+            "vite",
+            ...this.devDependencies,
+        ];
 
         this.generatorApp.options.dependencies = dependencies;
         this.generatorApp.options.devDependencies = devDependencies;
@@ -103,14 +127,18 @@ class GeneratorReact extends Generator<Options> {
         this.destinationRoot(this.appname);
         this.features = this.generatorApp.features;
 
-        this._viteInit();
-        await this._packageInit();
         await this.framework.writing();
+        await this._packageInit();
+
+        this.generatorApp.options.skippedFiles = [
+            this.destinationPath("src/index.ts"),
+        ];
     }
 
     /** Where conflicts are handled (used internally) */
     async conflicts() {
         await this.framework.conflicts();
+        console.log("conflicts called");
     }
 
     /** Where installations are run (npm, bower) */

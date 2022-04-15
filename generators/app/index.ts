@@ -21,10 +21,14 @@ interface ComposedOptions {
         checked?: boolean;
         disabled?: boolean;
     }[];
-    /** Merges into the existing package.json */
+    /** Merges into the existing package.json (writing stage) */
     packageJson?: {
-        [key: string]: unknown;
+        [key: string]: any;
     };
+    /** Destination paths to skip */
+    skippedFiles?: string[];
+    /** If the project is React */
+    react?: boolean;
 }
 
 export type GeneratorOptions = Arguments & Options & ComposedOptions; // In the end, all available under `this.options`
@@ -260,7 +264,9 @@ class GeneratorApp<
             "tsconfig.esm.json",
             "tsconfig.prod.json",
         ].forEach((file) =>
-            this._copyTpl(this.templatePath(file), this.destinationPath(file))
+            this._copyTpl(this.templatePath(file), this.destinationPath(file), {
+                react: this.options.react,
+            })
         );
 
         this._copyTpl(
@@ -472,6 +478,7 @@ class GeneratorApp<
         copyOptions?: Parameters<CopyTpl>[4]
     ) {
         if (this.fs.exists(to)) return;
+        if (this.options.skippedFiles?.includes(to)) return;
         this.fs.copyTpl(from, to, context, templateOptions, copyOptions);
     }
 }
