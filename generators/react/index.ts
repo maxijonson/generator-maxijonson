@@ -8,17 +8,20 @@ interface Options {
 }
 
 interface Answers {
-    framework: string;
+    framework: number;
 }
 
 const FEATURES = {} as const;
 
 class GeneratorReact extends Generator<Options> {
-    generatorApp!: GeneratorApp<typeof FEATURES>;
-    features!: typeof this.generatorApp["features"];
-    framework!: Framework;
-    frameworks: Framework[] = [];
-    answers!: Answers;
+    private generatorApp!: GeneratorApp<typeof FEATURES>;
+    private features!: typeof this.generatorApp["features"];
+    private framework!: Framework;
+    private frameworks: Framework[] = [];
+    private answers!: Answers;
+
+    dependencies: string[] = [];
+    devDependencies: string[] = [];
 
     constructor(
         args: ConstructorParameters<typeof Generator>[0],
@@ -42,16 +45,15 @@ class GeneratorReact extends Generator<Options> {
     async initializing() {
         const files = fs
             .readdirSync(this.templatePath("../frameworks"))
-            .filter((f) => f !== "Framework.ts");
+            .filter(
+                (f) => f.split(".")[0] !== "Framework" && !f.endsWith(".ts")
+            );
 
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const path = require(this.templatePath("../frameworks/Mantine.ts"));
-
-        // for (const file of files) {
-        //     // eslint-disable-next-line @typescript-eslint/no-var-requires
-        //     const framework = require(this.templatePath("../frameworks", file));
-        //     this.frameworks.push(new framework.default());
-        // }
+        for (const file of files) {
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            const Framework = require(`./frameworks/${file}`).default;
+            this.frameworks.push(new Framework(this));
+        }
     }
 
     /** Where you prompt users for options (where you'd call `this.prompt()`) */
@@ -64,18 +66,33 @@ class GeneratorReact extends Generator<Options> {
                 choices: this.frameworks.map((f, i) => ({
                     name: f.getName(),
                     value: i,
-                    short: "- " + f.getName(),
                 })),
             },
         ]);
+        this.framework = this.frameworks[this.answers.framework] as Framework;
+
+        await this.framework.prompting();
     }
 
     /** Saving configurations and configure the project (creating `.editorconfig` files and other metadata files) */
-    configuring() {}
+    async configuring() {
+        this.features = this.generatorApp.features;
+        await this.framework.configuring();
+    }
+
+    _viteInit() {
+        this.spawnCommandSync("npm", [
+            "create",
+            "@vitejs/app",
+            "mantine-vite",
+            "--template",
+            "react-ts",
+        ]);
+    }
 
     async _packageInit() {
-        const dependencies: string[] = [];
-        const devDependencies: string[] = [];
+        const dependencies: string[] = [...this.dependencies];
+        const devDependencies: string[] = [...this.devDependencies];
 
         this.generatorApp.options.dependencies = dependencies;
         this.generatorApp.options.devDependencies = devDependencies;
@@ -86,17 +103,25 @@ class GeneratorReact extends Generator<Options> {
         this.destinationRoot(this.appname);
         this.features = this.generatorApp.features;
 
+        this._viteInit();
         await this._packageInit();
+        await this.framework.writing();
     }
 
     /** Where conflicts are handled (used internally) */
-    conflicts() {}
+    async conflicts() {
+        await this.framework.conflicts();
+    }
 
     /** Where installations are run (npm, bower) */
-    install() {}
+    async install() {
+        await this.framework.install();
+    }
 
     /** Called last, cleanup, say good bye, etc */
-    end() {}
+    async end() {
+        await this.framework.end();
+    }
 }
 
 export default GeneratorReact;
