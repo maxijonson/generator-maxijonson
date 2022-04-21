@@ -80,13 +80,6 @@ class Mantine extends Framework {
         this.generator.dependencies.push(..._.flatten(this.answers.packages));
     }
 
-    repoInit() {
-        this.generator.copyTemplate(
-            this.generator.templatePath(FOLDER, "src"),
-            this.generator.destinationPath("src")
-        );
-    }
-
     packageInit() {
         this.dependenciesInit();
 
@@ -101,9 +94,41 @@ class Mantine extends Framework {
             "npm-run-all clean build:esm build:cjs build:types && vite build";
     }
 
+    repoInit() {
+        this.generator.copyTemplate(
+            this.generator.templatePath(FOLDER, "src/index.html"),
+            this.generator.destinationPath("src/index.html")
+        );
+
+        this.generator.copyTemplate(
+            this.generator.templatePath(FOLDER, "src/index.tsx"),
+            this.generator.destinationPath("src/index.tsx")
+        );
+
+        this.generator.copyTemplate(
+            this.generator.templatePath(FOLDER, "src/components/App.tsx"),
+            this.generator.destinationPath("src/components/App.tsx")
+        );
+    }
+
+    testsInit() {
+        if (!this.generator.features.tests) return;
+
+        this.generator.copyTemplate(
+            this.generator.templatePath(FOLDER, "src/components/App.test.tsx"),
+            this.generator.destinationPath("src/components/App.test.tsx")
+        );
+
+        this.generator.copyTemplate(
+            this.generator.templatePath(FOLDER, "src/config/setupTests.ts"),
+            this.generator.destinationPath("src/config/setupTests.ts")
+        );
+    }
+
     override writing(): void | Promise<void> {
         this.packageInit();
         this.repoInit();
+        this.testsInit();
     }
 }
 
