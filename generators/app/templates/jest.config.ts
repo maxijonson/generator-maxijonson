@@ -19,8 +19,9 @@ const config: Config.InitialOptions = {
       // Include patterns
       "src/**/*.{ts,js}",
       <% if (react) { %>"src/**/*.{tsx,jsx}",<% } %>
-      // Excldue patterns
+      // Exclude patterns
       "!**/*.d.ts",
+      "!src/index.ts",
       <% if (react) { %>"!src/index.tsx",<% } %>
     ],
     globals: {
