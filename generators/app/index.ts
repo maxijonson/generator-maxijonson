@@ -266,6 +266,7 @@ class GeneratorApp<
         ].forEach((file) =>
             this._copyTpl(this.templatePath(file), this.destinationPath(file), {
                 react: this.options.react,
+                tests: this.features.tests,
             })
         );
 
@@ -380,7 +381,7 @@ class GeneratorApp<
         this._copyTpl(
             this.templatePath(".eslintrc"),
             this.destinationPath(".eslintrc"),
-            { prettier: this.features.prettier }
+            { prettier: this.features.prettier, react: this.options.react }
         );
 
         this._copyTpl(
@@ -409,8 +410,14 @@ class GeneratorApp<
         );
 
         this._copyTpl(
+            this.templatePath("src/config/setupTests.ts"),
+            this.destinationPath("src/config/setupTests.ts")
+        );
+
+        this._copyTpl(
             this.templatePath("jest.config.ts"),
-            this.destinationPath("jest.config.ts")
+            this.destinationPath("jest.config.ts"),
+            { react: this.options.react }
         );
     }
 
@@ -469,7 +476,7 @@ class GeneratorApp<
         ]);
     }
 
-    /** Same as the standard copyTpl method, but only if the file does not already exist */
+    /** Same as the standard copyTpl method, but only if the file does not already exist and is not skipped */
     _copyTpl(
         from: Parameters<CopyTpl>[0],
         to: Parameters<CopyTpl>[1],

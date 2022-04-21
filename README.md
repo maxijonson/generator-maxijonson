@@ -38,8 +38,28 @@ Scaffolds the structure for an app intended to work as a CLI (with NPM).
 
 #### Usage
 
+**Note: includes the same options as App**
+
 ```bash
-yo maxijonson:cli [project-name] [--dependencies=<comma,separated>] [--devDependencies=<comma,separated>]
+yo maxijonson:cli [project-name]
+```
+
+### React
+
+⚠ This generator still requires some field testing and might not be complete ⚠
+
+Creates a React app using a UI library chosen by the user.
+
+Currently, the generator supports the following UI libraries:
+- [Mantine](https://mantine.dev/)
+
+#### Usage
+
+**Note: includes the same options as App**
+
+
+```bash
+yo maxijonson:react [project-name] [--framework=<framework-name>]
 ```
 
 ## Testing

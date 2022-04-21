@@ -114,9 +114,17 @@ class GeneratorReact extends Generator<GeneratorOptions> {
             "@types/react-dom",
             "@vitejs/plugin-react",
             "typescript",
-            "vite",
+            "vite", // TODO: Make this an option (Vite, Webpack, CRA, etc)
             ...this.devDependencies,
         ];
+
+        if (this.features.tests) {
+            devDependencies.push(
+                "@testing-library/react",
+                "@testing-library/jest-dom",
+                "@types/testing-library__jest-dom"
+            );
+        }
 
         this.generatorApp.options.dependencies = dependencies;
         this.generatorApp.options.devDependencies = devDependencies;
@@ -132,13 +140,13 @@ class GeneratorReact extends Generator<GeneratorOptions> {
 
         this.generatorApp.options.skippedFiles = [
             this.destinationPath("src/index.ts"),
+            this.destinationPath("src/index.test.ts"),
         ];
     }
 
     /** Where conflicts are handled (used internally) */
     async conflicts() {
         await this.framework.conflicts();
-        console.log("conflicts called");
     }
 
     /** Where installations are run (npm, bower) */

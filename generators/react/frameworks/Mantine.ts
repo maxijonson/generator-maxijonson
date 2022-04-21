@@ -1,7 +1,8 @@
+import _ from "lodash";
 import Framework from "./Framework";
 
 interface Answers {
-    packages: string[];
+    packages: (string | string[])[];
 }
 
 const FOLDER = "Mantine";
@@ -37,7 +38,7 @@ class Mantine extends Framework {
                     },
                     {
                         name: "Dates",
-                        value: "@mantine/dates",
+                        value: ["@mantine/dates", "dayjs"],
                         checked: false,
                     },
                     {
@@ -76,7 +77,7 @@ class Mantine extends Framework {
     }
 
     dependenciesInit() {
-        this.generator.dependencies.push(...this.answers.packages);
+        this.generator.dependencies.push(..._.flatten(this.answers.packages));
     }
 
     repoInit() {

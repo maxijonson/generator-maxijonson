@@ -15,6 +15,11 @@
         "preserveWatchOutput": true,
         "pretty": true,
         "newLine": "LF",
+        "types": [
+            <% if (tests) { %>"jest",<% } %>
+            <% if (tests && react) { %>"@testing-library/jest-dom",<% } %>
+            "node"
+        ],
         /* Rules */
         <% if (react) { %>"jsx": "react",<% } %>
         "strict": true,

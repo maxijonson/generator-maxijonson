@@ -78,6 +78,12 @@
                 "markers": ["/"]
             }
         ],
+
         <% if (prettier) { %> "prettier/prettier": ["warn"], <% } %>
+        
+        <% if (react) { %>
+        "react/jsx-filename-extension": ["error", { "extensions": [".tsx", ".jsx"] }],
+        "react/function-component-definition": "off",
+        <% } %>
     }
 }
