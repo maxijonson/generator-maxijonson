@@ -22,7 +22,7 @@ npm install -g generator-maxijonson
 
 ### App (default)
 
-Creates a basic TypeScript + Node application. This generator creates a project folder, so no need to create it manually.
+Creates a basic TypeScript + Node application. This generator creates a project folder, so no need to create it manually. If you want to use the current folder, just use "." as `project-name`.
 
 This is a dead simple setup. It should be used when writing a small app to accomplish a small task rapidly. It's like a scratchpad! Use it when you have an idea that pops in your mind, a small problem to solve or just need a rough draft and not sure how to go about it.
 

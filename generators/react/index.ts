@@ -132,7 +132,7 @@ class GeneratorReact extends Generator<GeneratorOptions> {
 
     /** Where you write the generator specific files (routes, controllers, etc) */
     async writing() {
-        this.destinationRoot(this.appname);
+        GeneratorApp._setDestinationRoot(this);
         this.features = this.generatorApp.features;
 
         await this.framework.writing();

@@ -154,7 +154,11 @@ class GeneratorApp<
 
     _validateName() {
         if (this.options.name) {
-            this.answers.name = npmifyName(this.options.name);
+            if (this.options.name === ".") {
+                this.answers.name = npmifyName(this.appname);
+            } else {
+                this.answers.name = npmifyName(this.options.name);
+            }
         }
 
         const {
@@ -202,10 +206,10 @@ class GeneratorApp<
                 "--clone",
                 "--private",
             ]);
-            this.destinationRoot(this.appname);
+            GeneratorApp._setDestinationRoot(this);
             return;
         }
-        this.destinationRoot(this.appname);
+        GeneratorApp._setDestinationRoot(this);
 
         if (!which.sync("git", { nothrow: true })) {
             this.log(chalk.yellow("Git is not installed"));
@@ -487,6 +491,12 @@ class GeneratorApp<
         if (this.fs.exists(to)) return;
         if (this.options.skippedFiles?.includes(to)) return;
         this.fs.copyTpl(from, to, context, templateOptions, copyOptions);
+    }
+
+    public static _setDestinationRoot(generator: Generator) {
+        if (generator.options.name !== ".") {
+            generator.destinationRoot(generator.appname);
+        }
     }
 }
 

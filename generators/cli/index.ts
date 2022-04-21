@@ -88,7 +88,7 @@ class GeneratorCli extends Generator<Options> {
 
     /** Where you write the generator specific files (routes, controllers, etc) */
     async writing() {
-        this.destinationRoot(this.appname);
+        GeneratorApp._setDestinationRoot(this);
         this.features = this.generatorApp.features;
 
         this._repoInit();

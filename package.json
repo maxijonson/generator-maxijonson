@@ -4,7 +4,7 @@
     "description": "My (MaxiJonson) personnal and highly opinionated generator. I use this to kickstart personnal projects. Might not be suitable for everyone!",
     "main": "lib/generators/app/index.js",
     "scripts": {
-        "clean": "rm -rf lib test/* generator-maxijonson-release.tgz package",
+        "clean": "rm -rf lib test/..?* test/.[!.]* test/* generator-maxijonson-release.tgz package",
         "tsc": "tsc",
         "copy-files": "copyfiles --all -e \"generators/*/*.ts\" \"generators/**/*\" lib",
         "build": "npm-run-all clean tsc copy-files",
