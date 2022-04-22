@@ -88,10 +88,6 @@ class Mantine extends Framework {
         if (!packageJson.scripts) {
             packageJson.scripts = scripts;
         }
-        scripts.start = "vite serve src";
-        scripts.preview = "vite preview";
-        scripts.build =
-            "npm-run-all clean build:esm build:cjs build:types && vite build";
     }
 
     repoInit() {
@@ -125,9 +121,33 @@ class Mantine extends Framework {
         );
     }
 
+    viteInit() {
+        this.generator.devDependencies.push(
+            "vite", // TODO: Make this an option (Vite, Webpack, CRA, etc)
+            "@vitejs/plugin-react"
+        );
+
+        const packageJson = this.generator.generatorApp.options.packageJson!;
+        const scripts: { [key: string]: string } = packageJson.scripts ?? {};
+        if (!packageJson.scripts) {
+            packageJson.scripts = scripts;
+        }
+
+        scripts.start = "vite serve src";
+        scripts.preview = "vite preview";
+        scripts.build =
+            "npm-run-all clean build:esm build:cjs build:types && vite build";
+
+        this.generator.copyTemplate(
+            this.generator.templatePath(FOLDER, "vite.config.ts"),
+            this.generator.destinationPath("vite.config.ts")
+        );
+    }
+
     override writing(): void | Promise<void> {
         this.packageInit();
         this.repoInit();
+        this.viteInit();
         this.testsInit();
     }
 }

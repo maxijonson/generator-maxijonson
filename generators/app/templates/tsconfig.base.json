@@ -8,7 +8,6 @@
         "allowSyntheticDefaultImports": true, // Automatically true when "esModuleInterop" is true
         "skipLibCheck": true,
         "resolveJsonModule": true,
-        "rootDir": "src",
         "baseUrl": ".",
         "allowJs": true,
         "sourceMap": true,

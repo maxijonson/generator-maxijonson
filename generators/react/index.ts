@@ -112,9 +112,7 @@ class GeneratorReact extends Generator<GeneratorOptions> {
         const devDependencies: string[] = [
             "@types/react",
             "@types/react-dom",
-            "@vitejs/plugin-react",
             "typescript",
-            "vite", // TODO: Make this an option (Vite, Webpack, CRA, etc)
             ...this.devDependencies,
         ];
 
