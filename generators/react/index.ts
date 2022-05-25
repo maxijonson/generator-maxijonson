@@ -15,9 +15,15 @@ type GeneratorOptions = Arguments & Options;
 
 interface Answers {
     framework: number;
+    router: boolean;
 }
 
-const FEATURES = {} as const;
+const FOLDER = "Common";
+
+const FEATURES = {
+    router: "router",
+    i18next: "i18next",
+} as const;
 
 class GeneratorReact extends Generator<GeneratorOptions> {
     generatorApp!: GeneratorApp<typeof FEATURES>;
@@ -41,6 +47,18 @@ class GeneratorReact extends Generator<GeneratorOptions> {
             name: this.options.name,
             packageJson: {},
             react: true,
+            features: [
+                {
+                    name: "React Router DOM",
+                    value: FEATURES.router,
+                    checked: true,
+                },
+                {
+                    name: "i18next",
+                    value: FEATURES.i18next,
+                    checked: false,
+                },
+            ],
         };
 
         this.generatorApp = this.composeWith(
@@ -103,7 +121,7 @@ class GeneratorReact extends Generator<GeneratorOptions> {
         await this.framework.configuring();
     }
 
-    async _packageInit() {
+    _packageInit() {
         const dependencies: string[] = [
             "react",
             "react-dom",
@@ -124,8 +142,39 @@ class GeneratorReact extends Generator<GeneratorOptions> {
             );
         }
 
+        if (this.features.router) {
+            dependencies.push("react-router-dom");
+        }
+
+        if (this.features.i18next) {
+            dependencies.push(
+                "i18next",
+                "react-i18next",
+                "i18next-browser-languagedetector",
+                "i18next-resources-to-backend"
+            );
+        }
+
         this.generatorApp.options.dependencies = dependencies;
         this.generatorApp.options.devDependencies = devDependencies;
+    }
+
+    _i18nextInit() {
+        if (!this.features.i18next) {
+            return;
+        }
+
+        this.copyTemplate(
+            this.templatePath(FOLDER, "src/i18n"),
+            this.destinationPath("src/i18n")
+        );
+    }
+
+    _globaldtsInit() {
+        this.copyTemplate(
+            this.templatePath(FOLDER, "src/global.d.ts"),
+            this.destinationPath("src/global.d.ts")
+        );
     }
 
     /** Where you write the generator specific files (routes, controllers, etc) */
@@ -134,7 +183,9 @@ class GeneratorReact extends Generator<GeneratorOptions> {
         this.features = this.generatorApp.features;
 
         await this.framework.writing();
-        await this._packageInit();
+        this._packageInit();
+        this._i18nextInit();
+        this._globaldtsInit();
 
         this.generatorApp.options.skippedFiles = [
             this.destinationPath("src/index.ts"),

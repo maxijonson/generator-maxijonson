@@ -84,3 +84,16 @@ npm start
 ```
 
 For convenience, I usually have 3 terminals open, one for running `npm test`, one for running the generator and one for running the generated project.
+
+Another faster way of testing your generator is by using these commands:
+
+```bash
+# 1. Go to the "test" folder
+cd test
+
+# 2. Build and run the generator
+npm test && yo maxijonson[:generator-name] [...args]
+
+# No dependencies
+npm test && yo maxijonson[:generator-name] [...args] --skip-install
+```

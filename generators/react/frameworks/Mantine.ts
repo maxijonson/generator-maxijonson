@@ -7,6 +7,19 @@ interface Answers {
 
 const FOLDER = "Mantine";
 
+const PACKAGES = {
+    core: "@mantine/core",
+    hooks: "@mantine/hooks",
+    form: "@mantine/form",
+    dates: ["@mantine/dates", "dayjs"],
+    notifications: "@mantine/notifications",
+    prism: "@mantine/prism",
+    rte: "@mantine/rte",
+    dropzone: "@mantine/dropzone",
+    modals: "@mantine/modals",
+    spotlight: "@mantine/spotlight",
+} as const;
+
 class Mantine extends Framework {
     answers!: Answers;
 
@@ -19,56 +32,56 @@ class Mantine extends Framework {
             {
                 name: "packages",
                 type: "checkbox",
-                message: "Which packages do you want to use?",
+                message: "Which Mantine packages do you want to use?",
                 choices: [
                     {
                         name: "Core",
-                        value: "@mantine/core",
+                        value: PACKAGES.core,
                         checked: true,
                     },
                     {
                         name: "Hooks",
-                        value: "@mantine/hooks",
+                        value: PACKAGES.hooks,
                         checked: true,
                     },
                     {
                         name: "Form",
-                        value: "@mantine/form",
+                        value: PACKAGES.form,
                         checked: false,
                     },
                     {
                         name: "Dates",
-                        value: ["@mantine/dates", "dayjs"],
+                        value: PACKAGES.dates,
                         checked: false,
                     },
                     {
                         name: "Notifications",
-                        value: "@mantine/notifications",
+                        value: PACKAGES.notifications,
                         checked: false,
                     },
                     {
                         name: "Prism",
-                        value: "@mantine/prism",
+                        value: PACKAGES.prism,
                         checked: false,
                     },
                     {
                         name: "RTE",
-                        value: "@mantine/rte",
+                        value: PACKAGES.rte,
                         checked: false,
                     },
                     {
                         name: "Dropzone",
-                        value: "@mantine/dropzone",
+                        value: PACKAGES.dropzone,
                         checked: false,
                     },
                     {
                         name: "Modals",
-                        value: "@mantine/modals",
+                        value: PACKAGES.modals,
                         checked: false,
                     },
                     {
                         name: "Spotlight",
-                        value: "@mantine/spotlight",
+                        value: PACKAGES.spotlight,
                         checked: false,
                     },
                 ],
@@ -91,19 +104,24 @@ class Mantine extends Framework {
     }
 
     repoInit() {
-        this.generator.copyTemplate(
+        this.generator.fs.copyTpl(
             this.generator.templatePath(FOLDER, "src/index.html"),
-            this.generator.destinationPath("src/index.html")
+            this.generator.destinationPath("src/index.html"),
+            { appname: this.generator.appname }
         );
 
-        this.generator.copyTemplate(
+        this.generator.fs.copyTpl(
             this.generator.templatePath(FOLDER, "src/index.tsx"),
-            this.generator.destinationPath("src/index.tsx")
+            this.generator.destinationPath("src/index.tsx"),
+            {
+                core: this.answers.packages.includes(PACKAGES.core),
+                i18next: this.generator.features.i18next,
+            }
         );
 
         this.generator.copyTemplate(
-            this.generator.templatePath(FOLDER, "src/components/App.tsx"),
-            this.generator.destinationPath("src/components/App.tsx")
+            this.generator.templatePath(FOLDER, "src/components/App/App.tsx"),
+            this.generator.destinationPath("src/components/App/App.tsx")
         );
     }
 
@@ -111,8 +129,11 @@ class Mantine extends Framework {
         if (!this.generator.features.tests) return;
 
         this.generator.copyTemplate(
-            this.generator.templatePath(FOLDER, "src/components/App.test.tsx"),
-            this.generator.destinationPath("src/components/App.test.tsx")
+            this.generator.templatePath(
+                FOLDER,
+                "src/components/App/App.test.tsx"
+            ),
+            this.generator.destinationPath("src/components/App/App.test.tsx")
         );
 
         this.generator.copyTemplate(
@@ -144,10 +165,19 @@ class Mantine extends Framework {
         );
     }
 
+    herokuInit() {
+        // https://vitejs.dev/guide/static-deploy.html#heroku
+        this.generator.copyTemplate(
+            this.generator.templatePath(FOLDER, "static.json"),
+            this.generator.destinationPath("static.json")
+        );
+    }
+
     override writing(): void | Promise<void> {
         this.packageInit();
         this.repoInit();
         this.viteInit();
+        this.herokuInit();
         this.testsInit();
     }
 }

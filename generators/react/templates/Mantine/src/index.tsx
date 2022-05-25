@@ -1,13 +1,14 @@
 import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { MantineProvider  } from "@mantine/core";
+<% if (core) { %>import { MantineProvider, TypographyStylesProvider } from "@mantine/core";<% } %>
 import App from "./components/App/App";
+<% if (i18next) { %>import "./i18n";<% } %>
 
 const root = createRoot(document.getElementById("root")!);
 root.render(
     <StrictMode>
-        <MantineProvider withNormalizeCSS withGlobalStyles>
+        <% if (core) { %><TypographyStylesProvider><MantineProvider withNormalizeCSS withGlobalStyles><% } %>
             <App />
-        </MantineProvider>
+        <% if (core) { %></MantineProvider></TypographyStylesProvider><% } %>
     </StrictMode>
 );
