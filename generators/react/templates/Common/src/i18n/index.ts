@@ -4,8 +4,8 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import resourcesToBackend from "i18next-resources-to-backend";
 
 i18next
-    .use(LanguageDetector)
-    .use(initReactI18next)
+    .use(LanguageDetector) 
+    .use(initReactI18next) 
     .use(
         resourcesToBackend(async (lng, ns, cb) => {
             try {
@@ -17,7 +17,7 @@ i18next
         })
     )
     .init({
-        debug: process.env.NODE_ENV === "development",
+        // debug: process.env.NODE_ENV === "development",
         fallbackLng: "en",
         supportedLngs: ["en", "fr"],
         nonExplicitSupportedLngs: false,
@@ -25,4 +25,3 @@ i18next
             escapeValue: false,
         },
     });
-
