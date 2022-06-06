@@ -9,8 +9,8 @@
         "allowSyntheticDefaultImports": true, // Automatically true when "esModuleInterop" is true
         "skipLibCheck": true,
         "resolveJsonModule": true,
-        "rootDir": "./",
-        "outDir": "./lib",
+        "rootDir": "./src",
+        "outDir": "./dist",
         "typeRoots": ["node_modules/@types"],
         "allowJs": true,
         "sourceMap": false,
@@ -33,6 +33,6 @@
         // "listFiles": true, // Prints the files that are being compiled.
         // "listEmittedFiles": true, // Prints the files that are emitted.
     },
-    "include": ["generators/**/*.ts", "generators/react/templates/Mantine/src/index.tsx"],
-    "exclude": ["generators/*/templates"]
+    "include": ["src"],
+    "exclude": ["src/generators/*/templates"]
 }
