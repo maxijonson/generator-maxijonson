@@ -29,7 +29,7 @@ This is a dead simple setup. It should be used when writing a small app to accom
 #### Usage
 
 ```bash
-yo maxijonson [project-name] [--dependencies=<comma,separated>] [--devDependencies=<comma,separated>]
+yo maxijonson [project-name]
 ```
 
 ### CLI

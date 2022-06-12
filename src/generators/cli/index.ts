@@ -1,108 +1,64 @@
 import Generator from "yeoman-generator";
-import GeneratorApp, { GeneratorOptions } from "../app";
+import path from "path";
+import Inquirer from "../../features/Inquirer";
+import TSIndex from "../../features/TSIndex";
+import Yargs from "../../features/Yargs";
+import GeneratorApp, { Arguments as AppArguments } from "../app";
 
-interface Options {
-    name?: string;
-}
-
-const FEATURES = {
-    yargs: "yargs",
-    inquirer: "inquirer",
-} as const;
-
-class GeneratorCli extends Generator<Options> {
-    generatorApp!: GeneratorApp<typeof FEATURES>;
-    features!: typeof this.generatorApp["features"];
-
+class GeneratorCli extends GeneratorApp {
     constructor(
         args: ConstructorParameters<typeof Generator>[0],
-        options: Options
+        options: AppArguments
     ) {
         super(args, options);
-        this.argument("name", { type: String, required: false });
 
-        const generatorOptions: GeneratorOptions = {
-            name: this.options.name,
-            features: [
-                {
-                    name: "Yargs",
-                    value: FEATURES.yargs,
-                    checked: true,
-                },
-                {
-                    name: "Inquirer",
-                    value: FEATURES.inquirer,
-                    checked: false,
-                },
-            ],
-        };
-
-        this.generatorApp = this.composeWith(
-            require.resolve("../app"),
-            generatorOptions,
-            true
-        ) as GeneratorApp<typeof FEATURES>;
-    }
-
-    /** Your initialization methods (checking current project state, getting configs, etc) */
-    initializing() {}
-
-    /** Where you prompt users for options (where you'd call `this.prompt()`) */
-    async prompting() {}
-
-    /** Saving configurations and configure the project (creating `.editorconfig` files and other metadata files) */
-    configuring() {}
-
-    _repoInit() {
-        this.fs.copyTpl(
-            this.templatePath("src/index.ts"),
-            this.destinationPath("src/index.ts"),
-            { yargs: this.features.yargs, inquirer: this.features.inquirer }
-        );
-    }
-
-    async _packageInit() {
-        this.generatorApp.options.packageJson = {
+        this.options.packageJson = {
             bin: "dist/cjs/index.js",
             scripts: {
                 ig: "npm-run-all build && npm i -g .",
             },
         };
+    }
 
-        const dependencies: string[] = [];
-        const devDependencies: string[] = [];
+    /** Your initialization methods (checking current project state, getting configs, etc) */
+    override async initializing() {
+        await super.initializing();
+        this.featureService
+            .setGenerator(this, path.join(__dirname, "templates"))
+            .addFeature(new TSIndex())
+            .addFeature(new Yargs())
+            .addFeature(new Inquirer());
+    }
 
-        if (this.features.yargs) {
-            dependencies.push("yargs");
-            devDependencies.push("@types/yargs");
-        }
+    /** Where you prompt users for options (where you'd call `this.prompt()`) */
+    override async prompting() {
+        await super.prompting();
+    }
 
-        if (this.features.inquirer) {
-            dependencies.push("inquirer");
-            devDependencies.push("@types/inquirer");
-        }
-
-        this.generatorApp.options.dependencies = dependencies;
-        this.generatorApp.options.devDependencies = devDependencies;
+    /** Saving configurations and configure the project (creating `.editorconfig` files and other metadata files) */
+    override async configuring() {
+        await super.configuring();
     }
 
     /** Where you write the generator specific files (routes, controllers, etc) */
-    async writing() {
-        GeneratorApp._setDestinationRoot(this);
-        this.features = this.generatorApp.features;
-
-        this._repoInit();
-        await this._packageInit();
+    override async writing() {
+        await super.writing();
     }
 
     /** Where conflicts are handled (used internally) */
-    conflicts() {}
+    override async conflicts() {
+        await super.conflicts();
+    }
 
     /** Where installations are run (npm, bower) */
-    install() {}
+    override async install() {
+        await super.install();
+    }
 
     /** Called last, cleanup, say good bye, etc */
-    end() {}
+    override async end() {
+        await super.end();
+    }
 }
 
 export default GeneratorCli;

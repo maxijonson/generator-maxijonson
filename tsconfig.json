@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "experimentalDecorators": true,
         /* Compilation */
         "incremental": false,
         "target": "ES6",
@@ -34,5 +35,5 @@
         // "listEmittedFiles": true, // Prints the files that are emitted.
     },
     "include": ["src"],
-    "exclude": ["src/generators/*/templates"]
+    "exclude": ["src/generators/*/templates", "src/generators/react"]
 }

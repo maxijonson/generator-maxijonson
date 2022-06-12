@@ -27,7 +27,6 @@ const FEATURES = {
 
 class GeneratorReact extends Generator<GeneratorOptions> {
     generatorApp!: GeneratorApp<typeof FEATURES>;
-    features!: typeof this.generatorApp["features"];
     framework!: Framework;
     frameworks: Framework[] = [];
     answers!: Answers;
