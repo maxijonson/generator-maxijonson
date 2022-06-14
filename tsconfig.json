@@ -35,5 +35,5 @@
         // "listEmittedFiles": true, // Prints the files that are emitted.
     },
     "include": ["src"],
-    "exclude": ["src/generators/*/templates", "src/generators/react"]
+    "exclude": ["src/generators/*/templates"]
 }

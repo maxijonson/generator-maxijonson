@@ -8,7 +8,11 @@ export default class React extends Feature {
     }
 
     @bind
-    public apply(generator: Generator): void {
-        throw new Error("Method not implemented.");
+    public async apply(generator: Generator): Promise<void> {
+        await generator.addDependencies(["react", "react-dom"]);
+        await generator.addDevDependencies([
+            "@types/react",
+            "@types/react-dom",
+        ]);
     }
 }

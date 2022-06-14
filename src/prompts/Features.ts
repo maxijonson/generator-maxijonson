@@ -5,12 +5,17 @@ import FeatureService from "../services/FeatureService/FeatureService";
 import Prompt from "../services/PromptService/Prompt";
 
 interface Answers {
-    features: string[]; // Feature IDs
+    features: string | string[]; // Feature IDs
 }
 
 export default class Features extends Prompt<Feature[]> {
-    constructor(private featureService: FeatureService) {
-        super("features");
+    constructor(
+        private featureService: FeatureService,
+        private type: "checkbox" | "list" = "checkbox",
+        id = "features",
+        message = "What features would you like?"
+    ) {
+        super(id, message);
     }
 
     @bind
@@ -19,9 +24,9 @@ export default class Features extends Prompt<Feature[]> {
 
         const { features } = await generator.prompt<Answers>([
             {
-                type: "checkbox",
+                type: this.type,
                 name: "features",
-                message: "What features would you like?",
+                message: this.message,
                 store: true,
                 choices: visibleFeatures.map((f) => ({
                     name: f.getName(),
@@ -32,10 +37,11 @@ export default class Features extends Prompt<Feature[]> {
             },
         ]);
 
+        const feats = typeof features === "string" ? [features] : features;
         visibleFeatures.forEach((f) => {
             this.featureService.setFeatureEnabled(
                 f.getId(),
-                features.includes(f.getId())
+                feats.includes(f.getId())
             );
         });
 

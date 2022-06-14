@@ -3,12 +3,12 @@ import path from "path";
 import Inquirer from "../../features/Inquirer";
 import TSIndex from "../../features/TSIndex";
 import Yargs from "../../features/Yargs";
-import GeneratorApp, { Arguments as AppArguments } from "../app";
+import GeneratorApp, { GeneratorOptions } from "../app";
 
 class GeneratorCli extends GeneratorApp {
     constructor(
         args: ConstructorParameters<typeof Generator>[0],
-        options: AppArguments
+        options: GeneratorOptions
     ) {
         super(args, options);
 
@@ -20,7 +20,6 @@ class GeneratorCli extends GeneratorApp {
         };
     }
 
-    /** Your initialization methods (checking current project state, getting configs, etc) */
     override async initializing() {
         await super.initializing();
         this.featureService
@@ -30,32 +29,26 @@ class GeneratorCli extends GeneratorApp {
             .addFeature(new Inquirer());
     }
 
-    /** Where you prompt users for options (where you'd call `this.prompt()`) */
     override async prompting() {
         await super.prompting();
     }
 
-    /** Saving configurations and configure the project (creating `.editorconfig` files and other metadata files) */
     override async configuring() {
         await super.configuring();
     }
 
-    /** Where you write the generator specific files (routes, controllers, etc) */
     override async writing() {
         await super.writing();
     }
 
-    /** Where conflicts are handled (used internally) */
     override async conflicts() {
         await super.conflicts();
     }
 
-    /** Where installations are run (npm, bower) */
     override async install() {
         await super.install();
     }
 
-    /** Called last, cleanup, say good bye, etc */
     override async end() {
         await super.end();
     }

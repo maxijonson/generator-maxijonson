@@ -36,5 +36,13 @@ export default class Tests extends Feature {
         );
 
         await generator.addDevDependencies(["jest", "@types/jest", "ts-jest"]);
+
+        if (react?.isEnabled()) {
+            await generator.addDevDependencies([
+                "@testing-library/react",
+                "@testing-library/jest-dom",
+                "@types/testing-library__jest-dom",
+            ]);
+        }
     }
 }

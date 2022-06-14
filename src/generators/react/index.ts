@@ -1,210 +1,88 @@
 import Generator from "yeoman-generator";
-import GeneratorApp, { GeneratorOptions as GeneratorAppOptions } from "../app";
-import Framework from "./frameworks/Framework";
-import fs from "fs";
-
-interface Arguments {
-    name?: string;
-}
+import path from "path";
+import GeneratorApp, { GeneratorOptions } from "../app";
+import ReactFrameworkService from "../../services/ReactFrameworkService/ReactFrameworkService";
+import ReactFrameworks from "../../prompts/ReactFrameworks";
+import Mantine from "../../react-frameworks/Mantine";
+import React from "../../features/React";
+import ReactRouterDom from "../../features/ReactRouterDom";
+import I18next from "../../features/I18next";
+import GlobalDTs from "../../features/GlobalDTs";
+import { PROMPT_ORDER_REACTFRAMEWORKS } from "../../utils/constants";
 
 interface Options {
     framework?: string;
 }
 
-type GeneratorOptions = Arguments & Options;
-
-interface Answers {
-    framework: number;
-    router: boolean;
-}
-
-const FOLDER = "Common";
-
-const FEATURES = {
-    router: "router",
-    i18next: "i18next",
-} as const;
-
-class GeneratorReact extends Generator<GeneratorOptions> {
-    generatorApp!: GeneratorApp<typeof FEATURES>;
-    framework!: Framework;
-    frameworks: Framework[] = [];
-    answers!: Answers;
-
-    dependencies: string[] = [];
-    devDependencies: string[] = [];
+class GeneratorReact extends GeneratorApp<Options> {
+    public frameworkService: ReactFrameworkService = new ReactFrameworkService(
+        this
+    );
 
     constructor(
         args: ConstructorParameters<typeof Generator>[0],
-        options: Arguments
+        options: GeneratorOptions<Options>
     ) {
         super(args, options);
-        this.argument("name", { type: String, required: false });
         this.option("framework", { type: String });
-
-        const generatorAppOptions: GeneratorAppOptions = {
-            name: this.options.name,
-            packageJson: {},
-            react: true,
-            features: [
-                {
-                    name: "React Router DOM",
-                    value: FEATURES.router,
-                    checked: true,
-                },
-                {
-                    name: "i18next",
-                    value: FEATURES.i18next,
-                    checked: false,
-                },
-            ],
-        };
-
-        this.generatorApp = this.composeWith(
-            require.resolve("../app"),
-            generatorAppOptions,
-            true
-        ) as GeneratorApp<typeof FEATURES>;
     }
 
     /** Your initialization methods (checking current project state, getting configs, etc) */
-    async initializing() {
-        const files = fs
-            .readdirSync(this.templatePath("../frameworks"))
-            .filter(
-                (f) => f.split(".")[0] !== "Framework" && !f.endsWith(".ts")
-            );
+    override async initializing() {
+        await super.initializing();
+        this.featureService
+            .setGenerator(this, path.join(__dirname, "templates", "Common"))
+            .addFeature(new React())
+            .addFeature(new ReactRouterDom())
+            .addFeature(new I18next())
+            .addFeature(new GlobalDTs());
 
-        for (const file of files) {
-            // eslint-disable-next-line @typescript-eslint/no-var-requires
-            const Framework = require(`./frameworks/${file}`).default;
-            this.frameworks.push(new Framework(this));
-        }
+        this.frameworkService
+            .setGenerator(this)
+            .addFramework(new Mantine(this));
+
+        this.promptService
+            .setGenerator(this)
+            .addPrompt(
+                new ReactFrameworks(this.frameworkService),
+                PROMPT_ORDER_REACTFRAMEWORKS
+            );
     }
 
     /** Where you prompt users for options (where you'd call `this.prompt()`) */
-    async prompting() {
-        const optionFramework = this.options.framework;
-        if (optionFramework) {
-            this.framework = this.frameworks.find(
-                (f) =>
-                    f.getName().toLowerCase() === optionFramework.toLowerCase()
-            ) as Framework;
-        }
-
-        this.answers = await this.prompt<Answers>([
-            {
-                type: "list",
-                name: "framework",
-                message: "Which framework do you want to use?",
-                choices: this.frameworks.map((f, i) => ({
-                    name: f.getName(),
-                    value: i,
-                })),
-                when: !this.framework,
-            },
-        ]);
-
-        if (typeof this.answers.framework === "number") {
-            this.framework = this.frameworks[
-                this.answers.framework
-            ] as Framework;
-        }
-
-        await this.framework.prompting();
+    override async prompting() {
+        await super.prompting();
+        await this.frameworkService.prompting();
     }
 
     /** Saving configurations and configure the project (creating `.editorconfig` files and other metadata files) */
-    async configuring() {
-        this.features = this.generatorApp.features;
-        await this.framework.configuring();
-    }
-
-    _packageInit() {
-        const dependencies: string[] = [
-            "react",
-            "react-dom",
-            ...this.dependencies,
-        ];
-        const devDependencies: string[] = [
-            "@types/react",
-            "@types/react-dom",
-            "typescript",
-            ...this.devDependencies,
-        ];
-
-        if (this.features.tests) {
-            devDependencies.push(
-                "@testing-library/react",
-                "@testing-library/jest-dom",
-                "@types/testing-library__jest-dom"
-            );
-        }
-
-        if (this.features.router) {
-            dependencies.push("react-router-dom");
-        }
-
-        if (this.features.i18next) {
-            dependencies.push(
-                "i18next",
-                "react-i18next",
-                "i18next-browser-languagedetector",
-                "i18next-resources-to-backend"
-            );
-        }
-
-        this.generatorApp.options.dependencies = dependencies;
-        this.generatorApp.options.devDependencies = devDependencies;
-    }
-
-    _i18nextInit() {
-        if (!this.features.i18next) {
-            return;
-        }
-
-        this.copyTemplate(
-            this.templatePath(FOLDER, "src/i18n"),
-            this.destinationPath("src/i18n")
-        );
-    }
-
-    _globaldtsInit() {
-        this.copyTemplate(
-            this.templatePath(FOLDER, "src/global.d.ts"),
-            this.destinationPath("src/global.d.ts")
-        );
+    override async configuring() {
+        await super.configuring();
+        await this.frameworkService.configuring();
     }
 
     /** Where you write the generator specific files (routes, controllers, etc) */
-    async writing() {
-        GeneratorApp._setDestinationRoot(this);
-        this.features = this.generatorApp.features;
-
-        await this.framework.writing();
-        this._packageInit();
-        this._i18nextInit();
-        this._globaldtsInit();
-
-        this.generatorApp.options.skippedFiles = [
-            this.destinationPath("src/index.ts"),
-            this.destinationPath("src/index.test.ts"),
-        ];
+    override async writing() {
+        await super.writing();
+        await this.frameworkService.writing();
     }
 
     /** Where conflicts are handled (used internally) */
-    async conflicts() {
-        await this.framework.conflicts();
+    override async conflicts() {
+        await super.conflicts();
+        await this.frameworkService.conflicts();
     }
 
     /** Where installations are run (npm, bower) */
-    async install() {
-        await this.framework.install();
+    override async install() {
+        await super.install();
+        await this.frameworkService.install();
     }
 
     /** Called last, cleanup, say good bye, etc */
-    async end() {
-        await this.framework.end();
+    override async end() {
+        await super.end();
+        await this.frameworkService.end();
     }
 }
 

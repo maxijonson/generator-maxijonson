@@ -8,8 +8,8 @@ interface Answers {
 }
 
 export default class AppName extends Prompt<string> {
-    constructor() {
-        super("appname");
+    constructor(message = "Your project name") {
+        super("appname", message);
     }
 
     @bind
@@ -23,7 +23,7 @@ export default class AppName extends Prompt<string> {
             {
                 type: "input",
                 name: "name",
-                message: "Your project name",
+                message: this.message,
                 when: !generator.options.name,
                 filter: this.npmifyName,
             },

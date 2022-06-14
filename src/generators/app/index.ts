@@ -23,6 +23,11 @@ import TSIndex from "../../features/TSIndex";
 import Lodash from "../../features/Lodash";
 import AppName from "../../prompts/AppName";
 import Features from "../../prompts/Features";
+import {
+    PROMPT_ORDER_APPNAME,
+    PROMPT_ORDER_FEATURES,
+} from "../../utils/constants";
+import bind from "../../decorators/bind";
 
 export interface Arguments {
     name?: string;
@@ -35,15 +40,19 @@ export interface ComposedOptions {
     };
 }
 
-export type GeneratorOptions = Arguments & ComposedOptions; // In the end, all available under `this.options`
+export type GeneratorOptions<
+    T extends Record<string, any> = Record<string, never>
+> = Arguments & ComposedOptions & T; // In the end, all available under `this.options`
 
-class GeneratorApp extends Generator<GeneratorOptions> {
-    protected featureService = new FeatureService(this);
-    protected promptService = new PromptService(this);
+class GeneratorApp<
+    T extends Record<string, any> = Record<string, never>
+> extends Generator<GeneratorOptions<T>> {
+    public featureService = new FeatureService(this);
+    public promptService = new PromptService(this);
 
     constructor(
         args: ConstructorParameters<typeof Generator>[0],
-        options: GeneratorOptions
+        options: GeneratorOptions<T>
     ) {
         super(args, options);
         this.argument("name", { type: String, required: false });
@@ -75,8 +84,11 @@ class GeneratorApp extends Generator<GeneratorOptions> {
 
         this.promptService
             .setGenerator(this)
-            .addPrompt(new AppName())
-            .addPrompt(new Features(this.featureService));
+            .addPrompt(new AppName(), PROMPT_ORDER_APPNAME)
+            .addPrompt(
+                new Features(this.featureService),
+                PROMPT_ORDER_FEATURES
+            );
     }
 
     /** Where you prompt users for options (where you'd call `this.prompt()`) */
