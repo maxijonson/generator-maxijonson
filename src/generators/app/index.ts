@@ -63,12 +63,12 @@ class GeneratorApp<
     async initializing() {
         this.featureService
             .setGenerator(this, path.join(__dirname, "templates"))
-            .addFeature(new Gh())
-            .addFeature(new Git(true))
-            .addFeature(new ESLint(true))
+            .addFeature(new Git(true), 1)
             .addFeature(new GitIgnore(true))
             .addFeature(new GitAttributes(true))
+            .addFeature(new ESLint(true))
             .addFeature(new Readme(true))
+            .addFeature(new Gh(), 0)
             .addFeature(new DevContainer())
             .addFeature(new Env())
             .addFeature(new Lodash())

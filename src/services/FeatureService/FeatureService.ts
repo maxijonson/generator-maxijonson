@@ -6,13 +6,18 @@ import Feature from "./Feature";
 
 type FeatureClass<T extends Feature> = new (...args: any[]) => T;
 
+interface FeatureConfig {
+    feature: Feature;
+    sourceRoot: string;
+    hidden: boolean;
+
+    /** The **execution** order when applying the features. (i.e: not the displayed order) */
+    order: number;
+}
+
 export default class FeatureService extends GeneratorService {
     private features: {
-        [featureId: string]: {
-            feature: Feature;
-            sourceRoot: string;
-            hidden: boolean;
-        };
+        [featureId: string]: FeatureConfig;
     } = {};
 
     constructor(generator: Generator) {
@@ -20,18 +25,19 @@ export default class FeatureService extends GeneratorService {
     }
 
     @bind
-    public addFeature(feature: Feature, hidden = false, override = true) {
-        if (this.features[feature.getId()] && !override) return this;
+    public addFeature(feature: Feature, order = 9999, hidden = false) {
         this.features[feature.getId()] = {
             feature,
             sourceRoot: this.generator.sourceRoot(),
             hidden,
+            order,
         };
         return this;
     }
 
-    @bind addHiddenFeature(feature: Feature, override = true) {
-        return this.addFeature(feature, true, override);
+    @bind
+    public addHiddenFeature(feature: Feature, order = 9999) {
+        return this.addFeature(feature, order, true);
     }
 
     @bind
@@ -46,21 +52,11 @@ export default class FeatureService extends GeneratorService {
     }
 
     @bind
-    public getEnabledFeatures(): Feature[] {
-        return _.filter(this.getFeatures(), (f) => f.isEnabled());
-    }
-
-    @bind
     public getVisibleFeatures(): Feature[] {
         return _(this.features)
             .filter(({ hidden }) => !hidden)
             .map(({ feature }) => feature)
             .value();
-    }
-
-    @bind
-    public getFeatureById(featureId: string): Feature | null {
-        return this.features[featureId]?.feature ?? null;
     }
 
     @bind
@@ -86,5 +82,25 @@ export default class FeatureService extends GeneratorService {
             })
         );
         this.generator.sourceRoot(sourceRoot);
+    }
+
+    @bind
+    private getSortedFeatureConfigs(): FeatureConfig[] {
+        return _.sortBy(this.features, ({ order }) => order);
+    }
+
+    @bind
+    private getSortedFeatures(): Feature[] {
+        return _.map(this.getSortedFeatureConfigs(), ({ feature }) => feature);
+    }
+
+    @bind
+    private getEnabledFeatures(): Feature[] {
+        return _.filter(this.getSortedFeatures(), (f) => f.isEnabled());
+    }
+
+    @bind
+    private getFeatureById(featureId: string): Feature | null {
+        return this.features[featureId]?.feature ?? null;
     }
 }
