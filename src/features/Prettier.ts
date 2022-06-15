@@ -5,8 +5,8 @@ import copyTpl from "../utils/copyTpl";
 import Tests from "./Tests";
 
 export default class Prettier extends Feature {
-    constructor(enabled = false, available = true, hidden = false) {
-        super("prettier", "Prettier", enabled, available, hidden);
+    constructor(enabled = false, available = true) {
+        super("prettier", "Prettier", enabled, available);
     }
 
     @bind

@@ -7,8 +7,8 @@ import React from "./React";
 import Tests from "./Tests";
 
 export default class ESLint extends Feature {
-    constructor(enabled = false, available = true, hidden = false) {
-        super("eslint", "ESLint", enabled, available, hidden);
+    constructor(enabled = false, available = true) {
+        super("eslint", "ESLint", enabled, available);
     }
 
     @bind

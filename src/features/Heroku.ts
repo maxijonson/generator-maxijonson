@@ -4,8 +4,8 @@ import Feature from "../services/FeatureService/Feature";
 import copyTpl from "../utils/copyTpl";
 
 export default class Heroku extends Feature {
-    constructor(enabled = false, available = true, hidden = false) {
-        super("heroku", "Heroku", enabled, available, hidden);
+    constructor(enabled = false, available = true) {
+        super("heroku", "Heroku", enabled, available);
     }
 
     @bind

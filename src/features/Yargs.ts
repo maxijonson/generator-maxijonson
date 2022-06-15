@@ -3,8 +3,8 @@ import bind from "../decorators/bind";
 import Feature from "../services/FeatureService/Feature";
 
 export default class Yargs extends Feature {
-    constructor(enabled = false, available = true, hidden = false) {
-        super("yargs", "Yargs", enabled, available, hidden);
+    constructor(enabled = false, available = true) {
+        super("yargs", "Yargs", enabled, available);
     }
 
     @bind

@@ -5,8 +5,8 @@ import copyTpl from "../utils/copyTpl";
 import React from "./React";
 
 export default class Vite extends Feature {
-    constructor(enabled = false, available = true, hidden = false) {
-        super("vite", "Vite", enabled, available, hidden);
+    constructor(enabled = false, available = true) {
+        super("vite", "Vite", enabled, available);
     }
 
     @bind

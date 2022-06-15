@@ -27,7 +27,7 @@ export default class Features extends Prompt<Feature[]> {
                 type: this.type,
                 name: "features",
                 message: this.message,
-                store: true,
+                store: false,
                 choices: visibleFeatures.map((f) => ({
                     name: f.getName(),
                     value: f.getId(),

@@ -3,8 +3,8 @@ import bind from "../decorators/bind";
 import Feature from "../services/FeatureService/Feature";
 
 export default class React extends Feature {
-    constructor(enabled = true, available = true, hidden = true) {
-        super("react", "React", enabled, available, hidden);
+    constructor(enabled = false, available = true) {
+        super("react", "React", enabled, available);
     }
 
     @bind

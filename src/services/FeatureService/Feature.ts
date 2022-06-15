@@ -10,8 +10,7 @@ export default abstract class Feature {
         protected id: string,
         protected name: string,
         protected enabled = false,
-        protected available = true,
-        protected hidden = false
+        protected available = true
     ) {}
 
     @bind
@@ -33,11 +32,6 @@ export default abstract class Feature {
     public setEnabled(enabled: boolean): this {
         this.enabled = enabled;
         return this;
-    }
-
-    @bind
-    public isHidden(): boolean {
-        return this.hidden;
     }
 
     @bind

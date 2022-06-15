@@ -2,14 +2,21 @@ import bind from "../../decorators/bind";
 import GeneratorReact from "../../generators/react";
 
 export default abstract class ReactFramework {
-    constructor(protected id: string, protected generator: GeneratorReact) {}
+    constructor(
+        protected id: string,
+        protected name: string,
+        protected generator: GeneratorReact
+    ) {}
 
     @bind
     public getId(): string {
         return this.id;
     }
 
-    abstract getName(): string;
+    @bind
+    public getName(): string {
+        return this.name;
+    }
 
     abstract initialize(): void | Promise<void>;
 

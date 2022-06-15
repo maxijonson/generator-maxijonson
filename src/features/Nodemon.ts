@@ -4,8 +4,8 @@ import copyTpl from "../utils/copyTpl";
 import DevContainer from "./DevContainer";
 
 export default class Nodemon extends Feature {
-    constructor(enabled = false, available = true, hidden = false) {
-        super("nodemon", "Nodemon", enabled, available, hidden);
+    constructor(enabled = false, available = true) {
+        super("nodemon", "Nodemon", enabled, available);
     }
 
     public async apply(

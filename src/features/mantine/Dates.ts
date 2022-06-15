@@ -3,8 +3,8 @@ import bind from "../../decorators/bind";
 import Feature from "../../services/FeatureService/Feature";
 
 export default class MantineDates extends Feature {
-    constructor() {
-        super("mantine-dates", "Dates");
+    constructor(enabled = false, available = true) {
+        super("mantine-dates", "Dates", enabled, available);
     }
 
     @bind

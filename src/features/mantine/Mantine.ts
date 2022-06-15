@@ -7,8 +7,8 @@ import Tests from "../Tests";
 import MantineCore from "./Core";
 
 export default class Mantine extends Feature {
-    constructor() {
-        super("mantine", "Mantine", true, true, true);
+    constructor(enabled = false, available = true) {
+        super("mantine", "Mantine", enabled, available);
     }
 
     @bind

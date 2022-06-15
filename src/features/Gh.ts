@@ -7,10 +7,9 @@ import setDestinationRoot from "../utils/setDestinationRoot";
 export default class Gh extends Feature {
     constructor(
         enabled = false,
-        available = !!which.sync("gh", { nothrow: true }),
-        hidden = false
+        available = !!which.sync("gh", { nothrow: true })
     ) {
-        super("gh", "Github Repo", enabled, available, hidden);
+        super("gh", "Github Repo", enabled, available);
     }
 
     public override getName(): string {

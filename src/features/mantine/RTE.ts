@@ -3,8 +3,8 @@ import bind from "../../decorators/bind";
 import Feature from "../../services/FeatureService/Feature";
 
 export default class MantineRTE extends Feature {
-    constructor() {
-        super("mantine-rte", "RTE");
+    constructor(enabled = false, available = true) {
+        super("mantine-rte", "RTE", enabled, available);
     }
 
     @bind

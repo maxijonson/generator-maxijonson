@@ -3,8 +3,8 @@ import bind from "../../decorators/bind";
 import Feature from "../../services/FeatureService/Feature";
 
 export default class MantineForm extends Feature {
-    constructor() {
-        super("mantine-form", "Form");
+    constructor(enabled = false, available = true) {
+        super("mantine-form", "Form", enabled, available);
     }
 
     @bind

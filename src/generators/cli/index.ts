@@ -24,9 +24,9 @@ class GeneratorCli extends GeneratorApp {
         await super.initializing();
         this.featureService
             .setGenerator(this, path.join(__dirname, "templates"))
-            .addFeature(new TSIndex())
             .addFeature(new Yargs())
-            .addFeature(new Inquirer());
+            .addFeature(new Inquirer())
+            .addHiddenFeature(new TSIndex(true));
     }
 
     override async prompting() {

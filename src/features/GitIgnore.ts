@@ -7,8 +7,8 @@ import VSCodeLaunch from "./VSCodeLaunch";
 import VSCodeSettings from "./VSCodeSettings";
 
 export default class GitIgnore extends Feature {
-    constructor(enabled = true, available = true, hidden = true) {
-        super("gitignore", ".gitignore", enabled, available, hidden);
+    constructor(enabled = false, available = true) {
+        super("gitignore", ".gitignore", enabled, available);
     }
 
     @bind

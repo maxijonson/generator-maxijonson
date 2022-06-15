@@ -6,8 +6,8 @@ import Inquirer from "./Inquirer";
 import Yargs from "./Yargs";
 
 export default class TSIndex extends Feature {
-    constructor(enabled = true, available = true, hidden = true) {
-        super("tsindex", "index.ts", enabled, available, hidden);
+    constructor(enabled = false, available = true) {
+        super("tsindex", "index.ts", enabled, available);
     }
 
     @bind

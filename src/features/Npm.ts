@@ -5,8 +5,8 @@ import copyTpl from "../utils/copyTpl";
 import Tests from "./Tests";
 
 export default class Npm extends Feature {
-    constructor(enabled = false, available = true, hidden = false) {
-        super("npm", "NPM Publishing", enabled, available, hidden);
+    constructor(enabled = false, available = true) {
+        super("npm", "NPM Publishing", enabled, available);
     }
 
     @bind

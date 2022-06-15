@@ -4,8 +4,8 @@ import Feature from "../services/FeatureService/Feature";
 import copyTpl from "../utils/copyTpl";
 
 export default class DevContainer extends Feature {
-    constructor(enabled = false, available = true, hidden = false) {
-        super("devcontainer", "Dev Container", enabled, available, hidden);
+    constructor(enabled = false, available = true) {
+        super("devcontainer", "Dev Container", enabled, available);
     }
 
     @bind

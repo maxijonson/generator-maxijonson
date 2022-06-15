@@ -3,8 +3,8 @@ import bind from "../decorators/bind";
 import Feature from "../services/FeatureService/Feature";
 
 export default class Inquirer extends Feature {
-    constructor(enabled = false, available = true, hidden = false) {
-        super("inquirer", "Inquirer", enabled, available, hidden);
+    constructor(enabled = false, available = true) {
+        super("inquirer", "Inquirer", enabled, available);
     }
 
     @bind

@@ -4,14 +4,8 @@ import Feature from "../services/FeatureService/Feature";
 import copyTpl from "../utils/copyTpl";
 
 export default class VSCodeSettings extends Feature {
-    constructor(enabled = false, available = true, hidden = false) {
-        super(
-            "vscode-settings",
-            "VSCode Project Settings",
-            enabled,
-            available,
-            hidden
-        );
+    constructor(enabled = false, available = true) {
+        super("vscode-settings", "VSCode Project Settings", enabled, available);
     }
 
     @bind

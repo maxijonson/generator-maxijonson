@@ -4,8 +4,8 @@ import Feature from "../services/FeatureService/Feature";
 import copyTpl from "../utils/copyTpl";
 
 export default class GlobalDTs extends Feature {
-    constructor(enabled = false, available = true, hidden = false) {
-        super("globaldts", "global.d.ts", enabled, available, hidden);
+    constructor(enabled = false, available = true) {
+        super("globaldts", "global.d.ts", enabled, available);
     }
 
     @bind

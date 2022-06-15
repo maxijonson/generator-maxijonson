@@ -4,8 +4,8 @@ import Feature from "../services/FeatureService/Feature";
 import copyTpl from "../utils/copyTpl";
 
 export default class License extends Feature {
-    constructor(enabled = true, available = true, hidden = true) {
-        super("license", "License", enabled, available, hidden);
+    constructor(enabled = false, available = true) {
+        super("license", "License", enabled, available);
     }
 
     @bind

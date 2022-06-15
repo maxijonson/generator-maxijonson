@@ -3,8 +3,8 @@ import bind from "../decorators/bind";
 import Feature from "../services/FeatureService/Feature";
 
 export default class ReactRouterDom extends Feature {
-    constructor(enabled = true, available = true, hidden = false) {
-        super("reactrouterdom", "React Router DOM", enabled, available, hidden);
+    constructor(enabled = false, available = true) {
+        super("reactrouterdom", "React Router DOM", enabled, available);
     }
 
     @bind

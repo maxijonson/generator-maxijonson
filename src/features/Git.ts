@@ -8,11 +8,10 @@ import Gh from "./Gh";
 
 export default class Git extends Feature {
     constructor(
-        enabled = true,
-        available = !!which.sync("git", { nothrow: true }),
-        hidden = true
+        enabled = false,
+        available = !!which.sync("git", { nothrow: true })
     ) {
-        super("git", "Git Init", enabled, available, hidden);
+        super("git", "Git Init", enabled, available);
     }
 
     public override getName(): string {

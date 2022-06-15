@@ -4,8 +4,8 @@ import Feature from "../services/FeatureService/Feature";
 import copyTpl from "../utils/copyTpl";
 
 export default class Readme extends Feature {
-    constructor(enabled = true, available = true, hidden = true) {
-        super("readme", "README.md", enabled, available, hidden);
+    constructor(enabled = false, available = true) {
+        super("readme", "README.md", enabled, available);
     }
 
     @bind

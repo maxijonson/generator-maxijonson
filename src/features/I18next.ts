@@ -5,8 +5,8 @@ import copyTpl from "../utils/copyTpl";
 import React from "./React";
 
 export default class I18next extends Feature {
-    constructor(enabled = false, available = true, hidden = false) {
-        super("i18next", "i18next", enabled, available, hidden);
+    constructor(enabled = false, available = true) {
+        super("i18next", "i18next", enabled, available);
     }
 
     @bind

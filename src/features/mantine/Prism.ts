@@ -3,8 +3,8 @@ import bind from "../../decorators/bind";
 import Feature from "../../services/FeatureService/Feature";
 
 export default class MantinePrism extends Feature {
-    constructor() {
-        super("mantine-prism", "Prism");
+    constructor(enabled = false, available = true) {
+        super("mantine-prism", "Prism", enabled, available);
     }
 
     @bind

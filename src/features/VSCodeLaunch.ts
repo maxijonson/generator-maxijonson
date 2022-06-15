@@ -4,14 +4,8 @@ import Feature from "../services/FeatureService/Feature";
 import copyTpl from "../utils/copyTpl";
 
 export default class VSCodeLaunch extends Feature {
-    constructor(enabled = false, available = true, hidden = false) {
-        super(
-            "vscode-launch",
-            "VSCode Launch Settings",
-            enabled,
-            available,
-            hidden
-        );
+    constructor(enabled = false, available = true) {
+        super("vscode-launch", "VSCode Launch Settings", enabled, available);
     }
 
     @bind

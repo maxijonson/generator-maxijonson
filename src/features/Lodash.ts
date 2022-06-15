@@ -3,8 +3,8 @@ import bind from "../decorators/bind";
 import Feature from "../services/FeatureService/Feature";
 
 export default class Lodash extends Feature {
-    constructor(enabled = false, available = true, hidden = false) {
-        super("lodash", "Lodash", enabled, available, hidden);
+    constructor(enabled = false, available = true) {
+        super("lodash", "Lodash", enabled, available);
     }
 
     @bind

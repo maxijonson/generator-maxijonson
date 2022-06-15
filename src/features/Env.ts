@@ -4,8 +4,8 @@ import Feature from "../services/FeatureService/Feature";
 import copyTpl from "../utils/copyTpl";
 
 export default class Env extends Feature {
-    constructor(enabled = false, available = true, hidden = false) {
-        super("env", ".env", enabled, available, hidden);
+    constructor(enabled = false, available = true) {
+        super("env", ".env", enabled, available);
     }
 
     @bind

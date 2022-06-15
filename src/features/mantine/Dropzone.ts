@@ -3,8 +3,8 @@ import bind from "../../decorators/bind";
 import Feature from "../../services/FeatureService/Feature";
 
 export default class MantineDropzone extends Feature {
-    constructor() {
-        super("mantine-dropzone", "Dropzone");
+    constructor(enabled = false, available = true) {
+        super("mantine-dropzone", "Dropzone", enabled, available);
     }
 
     @bind

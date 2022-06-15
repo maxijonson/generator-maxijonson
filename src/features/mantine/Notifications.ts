@@ -3,8 +3,8 @@ import bind from "../../decorators/bind";
 import Feature from "../../services/FeatureService/Feature";
 
 export default class MantineNotifications extends Feature {
-    constructor() {
-        super("mantine-notifications", "Notifications");
+    constructor(enabled = false, available = true) {
+        super("mantine-notifications", "Notifications", enabled, available);
     }
 
     @bind

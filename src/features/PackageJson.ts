@@ -7,8 +7,8 @@ import Npm from "./Npm";
 import Tests from "./Tests";
 
 export default class PackageJson extends Feature {
-    constructor(enabled = true, available = true, hidden = true) {
-        super("packagejson", "package.json", enabled, available, hidden);
+    constructor(enabled = false, available = true) {
+        super("packagejson", "package.json", enabled, available);
     }
 
     @bind

@@ -6,8 +6,6 @@ import ReactFrameworks from "../../prompts/ReactFrameworks";
 import Mantine from "../../react-frameworks/Mantine";
 import React from "../../features/React";
 import ReactRouterDom from "../../features/ReactRouterDom";
-import I18next from "../../features/I18next";
-import GlobalDTs from "../../features/GlobalDTs";
 import { PROMPT_ORDER_REACTFRAMEWORKS } from "../../utils/constants";
 
 interface Options {
@@ -32,10 +30,8 @@ class GeneratorReact extends GeneratorApp<Options> {
         await super.initializing();
         this.featureService
             .setGenerator(this, path.join(__dirname, "templates", "Common"))
-            .addFeature(new React())
             .addFeature(new ReactRouterDom())
-            .addFeature(new I18next())
-            .addFeature(new GlobalDTs());
+            .addHiddenFeature(new React(true));
 
         this.frameworkService
             .setGenerator(this)

@@ -16,10 +16,7 @@ import Features from "../prompts/Features";
 import FeatureService from "../services/FeatureService/FeatureService";
 import Framework from "../services/ReactFrameworkService/ReactFramework";
 import GeneratorReact from "../generators/react";
-import {
-    FEATURE_DISABLED,
-    PROMPT_ORDER_REACTFRAMEWORK,
-} from "../utils/constants";
+import { PROMPT_ORDER_REACTFRAMEWORK } from "../utils/constants";
 import TSIndex from "../features/TSIndex";
 
 interface Answers {
@@ -33,12 +30,7 @@ class Mantine extends Framework {
     answers!: Answers;
 
     constructor(generator: GeneratorReact) {
-        super("mantine", generator);
-    }
-
-    @bind
-    public getName(): string {
-        return "Mantine";
+        super("mantine", "Mantine", generator);
     }
 
     @bind
@@ -50,8 +42,8 @@ class Mantine extends Framework {
         );
         this.packagesFeatureService = new FeatureService(this.generator)
             .setGenerator(this.generator, sourceRoot)
-            .addFeature(new MantineCore())
-            .addFeature(new MantineHooks())
+            .addFeature(new MantineCore(true))
+            .addFeature(new MantineHooks(true))
             .addFeature(new MantineForm())
             .addFeature(new MantineDates())
             .addFeature(new MantineNotifications())
@@ -67,8 +59,8 @@ class Mantine extends Framework {
 
         this.generator.featureService
             .setGenerator(this.generator, sourceRoot)
-            .addFeature(new TSIndex(...FEATURE_DISABLED))
-            .addFeature(new MantineFramework());
+            .addHiddenFeature(new MantineFramework(true))
+            .addHiddenFeature(new TSIndex());
 
         this.generator.promptService
             .addPrompt(

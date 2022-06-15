@@ -11,6 +11,7 @@ export default class FeatureService extends GeneratorService {
         [featureId: string]: {
             feature: Feature;
             sourceRoot: string;
+            hidden: boolean;
         };
     } = {};
 
@@ -19,13 +20,18 @@ export default class FeatureService extends GeneratorService {
     }
 
     @bind
-    public addFeature(feature: Feature, override = true) {
+    public addFeature(feature: Feature, hidden = false, override = true) {
         if (this.features[feature.getId()] && !override) return this;
         this.features[feature.getId()] = {
             feature,
             sourceRoot: this.generator.sourceRoot(),
+            hidden,
         };
         return this;
+    }
+
+    @bind addHiddenFeature(feature: Feature, override = true) {
+        return this.addFeature(feature, true, override);
     }
 
     @bind
@@ -46,7 +52,10 @@ export default class FeatureService extends GeneratorService {
 
     @bind
     public getVisibleFeatures(): Feature[] {
-        return _.filter(this.getFeatures(), (f) => !f.isHidden());
+        return _(this.features)
+            .filter(({ hidden }) => !hidden)
+            .map(({ feature }) => feature)
+            .value();
     }
 
     @bind

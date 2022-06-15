@@ -27,7 +27,8 @@ import {
     PROMPT_ORDER_APPNAME,
     PROMPT_ORDER_FEATURES,
 } from "../../utils/constants";
-import bind from "../../decorators/bind";
+import I18next from "../../features/I18next";
+import GlobalDTs from "../../features/GlobalDTs";
 
 export interface Arguments {
     name?: string;
@@ -63,24 +64,26 @@ class GeneratorApp<
         this.featureService
             .setGenerator(this, path.join(__dirname, "templates"))
             .addFeature(new Gh())
-            .addFeature(new Git())
-            .addFeature(new PackageJson())
+            .addFeature(new Git(true))
+            .addFeature(new ESLint(true))
+            .addFeature(new GitIgnore(true))
+            .addFeature(new GitAttributes(true))
+            .addFeature(new Readme(true))
             .addFeature(new DevContainer())
             .addFeature(new Env())
-            .addFeature(new TSConfig())
-            .addFeature(new TSIndex())
             .addFeature(new Lodash())
-            .addFeature(new ESLint())
             .addFeature(new Prettier())
             .addFeature(new Tests())
-            .addFeature(new GitIgnore())
-            .addFeature(new GitAttributes())
-            .addFeature(new Readme())
             .addFeature(new License())
             .addFeature(new Nodemon())
             .addFeature(new Npm())
             .addFeature(new VSCodeLaunch())
-            .addFeature(new VSCodeSettings());
+            .addFeature(new VSCodeSettings())
+            .addFeature(new I18next())
+            .addFeature(new GlobalDTs())
+            .addHiddenFeature(new TSConfig(true))
+            .addHiddenFeature(new TSIndex(true))
+            .addHiddenFeature(new PackageJson(true));
 
         this.promptService
             .setGenerator(this)
