@@ -18,7 +18,7 @@ export default class Nodemon extends Feature {
             generator,
             generator.templatePath("nodemon.json"),
             generator.destinationPath("nodemon.json"),
-            { devcontainer: devcontainer?.isEnabled() ?? false }
+            { devcontainer: devcontainer?.isEnabled() }
         );
 
         await generator.addDevDependencies(["nodemon"]);

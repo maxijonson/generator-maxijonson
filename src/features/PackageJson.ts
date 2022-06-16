@@ -25,8 +25,8 @@ export default class PackageJson extends Feature {
             generator.destinationPath("package.json"),
             {
                 appname: generator.appname,
-                tests: tests?.isEnabled() ?? false,
-                npm: npm?.isEnabled() ?? false,
+                tests: tests?.isEnabled(),
+                npm: npm?.isEnabled(),
             }
         );
 

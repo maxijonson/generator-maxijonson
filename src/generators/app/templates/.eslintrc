@@ -19,6 +19,9 @@
         <% if (prettier) { %>
         "prettier",
         <% } %>
+        <% if (react) { %>
+        "react-hooks",
+        <% } %>
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -93,7 +96,9 @@
         "react/jsx-filename-extension": ["error", { "extensions": [".tsx", ".jsx"] }],
         "react/function-component-definition": "off",
         "react/require-default-props": "off",
-        "react/no-unused-prop-types": "off"
+        "react/no-unused-prop-types": "off",
+        "react/jsx-props-no-spreading": "off",
+        "react-hooks/exhaustive-deps": "warn",
         <% } %>
     }
 }

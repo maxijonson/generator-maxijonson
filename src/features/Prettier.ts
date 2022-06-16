@@ -26,7 +26,7 @@ export default class Prettier extends Feature {
             generator,
             generator.templatePath(".prettierignore"),
             generator.destinationPath(".prettierignore"),
-            { tests: tests?.isEnabled() ?? false }
+            { tests: tests?.isEnabled() }
         );
 
         await generator.addDevDependencies(["prettier"]);

@@ -36,5 +36,8 @@
         // "listFiles": true, // Prints the files that are being compiled.
         // "listEmittedFiles": true, // Prints the files that are emitted.
     },
-    "include": ["src"]
+    "include": [
+        "src",
+        <% if (vite) { %>"vite.config.ts",<% } %>
+    ]
 }

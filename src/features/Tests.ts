@@ -32,7 +32,7 @@ export default class Tests extends Feature {
             generator,
             generator.templatePath("jest.config.ts"),
             generator.destinationPath("jest.config.ts"),
-            { react: react?.isEnabled() ?? false }
+            { react: react?.isEnabled() }
         );
 
         await generator.addDevDependencies(["jest", "@types/jest", "ts-jest"]);

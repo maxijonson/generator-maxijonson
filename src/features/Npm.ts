@@ -20,7 +20,7 @@ export default class Npm extends Feature {
             generator,
             generator.templatePath(".np-config.json"),
             generator.destinationPath(".np-config.json"),
-            { tests: tests?.isEnabled() ?? false }
+            { tests: tests?.isEnabled() }
         );
 
         await generator.addDevDependencies(["np"]);

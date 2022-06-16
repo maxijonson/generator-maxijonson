@@ -20,8 +20,8 @@ export default class TSIndex extends Feature {
             generator.templatePath("src/index.ts"),
             generator.destinationPath("src/index.ts"),
             {
-                yargs: yargs?.isEnabled() ?? false,
-                inquirer: inquirer?.isEnabled() ?? false,
+                yargs: yargs?.isEnabled(),
+                inquirer: inquirer?.isEnabled(),
             }
         );
     }

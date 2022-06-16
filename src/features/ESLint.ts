@@ -25,8 +25,8 @@ export default class ESLint extends Feature {
             generator.templatePath(".eslintrc"),
             generator.destinationPath(".eslintrc"),
             {
-                prettier: prettier?.isEnabled() ?? false,
-                react: react?.isEnabled() ?? false,
+                prettier: prettier?.isEnabled(),
+                react: react?.isEnabled(),
             }
         );
 
@@ -34,7 +34,7 @@ export default class ESLint extends Feature {
             generator,
             generator.templatePath(".eslintignore"),
             generator.destinationPath(".eslintignore"),
-            { tests: tests?.isEnabled() ?? false }
+            { tests: tests?.isEnabled() }
         );
 
         await generator.addDevDependencies([
@@ -51,6 +51,10 @@ export default class ESLint extends Feature {
                 "eslint-plugin-prettier",
                 "eslint-config-prettier",
             ]);
+        }
+
+        if (react?.isEnabled()) {
+            await generator.addDevDependencies(["eslint-plugin-react-hooks"]);
         }
     }
 }

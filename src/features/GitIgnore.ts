@@ -22,9 +22,9 @@ export default class GitIgnore extends Feature {
             generator.templatePath("gitignore"),
             generator.destinationPath(".gitignore"),
             {
-                settings: settings?.isEnabled() ?? false,
-                launch: launch?.isEnabled() ?? false,
-                tests: tests?.isEnabled() ?? false,
+                settings: settings?.isEnabled(),
+                launch: launch?.isEnabled(),
+                tests: tests?.isEnabled(),
             }
         );
     }
