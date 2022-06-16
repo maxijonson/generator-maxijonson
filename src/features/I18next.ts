@@ -19,7 +19,8 @@ export default class I18next extends Feature {
         copyTpl(
             generator,
             generator.templatePath("src/i18n"),
-            generator.destinationPath("src/i18n")
+            generator.destinationPath("src/i18n"),
+            { react: react?.isEnabled() }
         );
 
         await generator.addDependencies([

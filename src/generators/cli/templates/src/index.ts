@@ -1,6 +1,8 @@
 #!/usr/bin/env node
-<% if (yargs) { %>import yargs from "yargs";
-import { hideBin } from "yargs/helpers";<% } %>
+<% if (yargs) { %>
+import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
+<% } %>
 <% if (inquirer) { %>import inquirer from 'inquirer';<% } %>
 
 <% if (!yargs && !inquirer) { %>

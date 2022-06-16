@@ -7,6 +7,7 @@ import Mantine from "../../react-frameworks/Mantine";
 import React from "../../features/React";
 import ReactRouterDom from "../../features/ReactRouterDom";
 import { PROMPT_ORDER_REACTFRAMEWORKS } from "../../utils/constants";
+import Heroku from "../../features/Heroku";
 
 interface Options {
     framework?: string;
@@ -31,6 +32,7 @@ class GeneratorReact extends GeneratorApp<Options> {
         this.featureService
             .setGenerator(this, path.join(__dirname, "templates", "Common"))
             .addFeature(new ReactRouterDom())
+            .addFeature(new Heroku())
             .addHiddenFeature(new React(true));
 
         this.frameworkService

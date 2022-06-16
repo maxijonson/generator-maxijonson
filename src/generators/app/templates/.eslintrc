@@ -10,11 +10,15 @@
         "eslint:recommended",
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended",
-        <% if (prettier) { %> "prettier", "plugin:prettier/recommended", <% } %>
+        <% if (prettier) { %>
+        "prettier", "plugin:prettier/recommended",
+        <% } %>
     ],
     "plugins": [
         "@typescript-eslint", 
-        <% if (prettier) { %> "prettier", <% } %>
+        <% if (prettier) { %>
+        "prettier",
+        <% } %>
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -81,7 +85,9 @@
             }
         ],
 
-        <% if (prettier) { %> "prettier/prettier": ["warn"], <% } %>
+        <% if (prettier) { %>
+        "prettier/prettier": ["warn"],
+        <% } %>
         
         <% if (react) { %>
         "react/jsx-filename-extension": ["error", { "extensions": [".tsx", ".jsx"] }],
