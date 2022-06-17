@@ -8,7 +8,7 @@ export default class MantineModals extends Feature {
     }
 
     @bind
-    public apply(generator: Generator): void {
-        generator.addDependencies(["@mantine/modals"]);
+    public async apply(generator: Generator): Promise<void> {
+        await generator.addDependencies(["@mantine/modals"]);
     }
 }

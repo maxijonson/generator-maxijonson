@@ -8,7 +8,7 @@ export default class MantineForm extends Feature {
     }
 
     @bind
-    public apply(generator: Generator): void {
-        generator.addDependencies(["@mantine/form"]);
+    public async apply(generator: Generator): Promise<void> {
+        await generator.addDependencies(["@mantine/form"]);
     }
 }

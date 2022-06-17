@@ -2,6 +2,7 @@ import Generator from "yeoman-generator";
 import bind from "../decorators/bind";
 import Feature, { GetFeature } from "../services/FeatureService/Feature";
 import copyTpl from "../utils/copyTpl";
+import React from "./React";
 import Tests from "./Tests";
 import Vite from "./Vite";
 
@@ -14,6 +15,7 @@ export default class TSConfig extends Feature {
     public apply(generator: Generator, getFeature: GetFeature): void {
         const tests = getFeature(Tests);
         const vite = getFeature(Vite);
+        const react = getFeature(React);
 
         [
             "tsconfig.base.json",
@@ -27,7 +29,7 @@ export default class TSConfig extends Feature {
                 generator.templatePath(file),
                 generator.destinationPath(file),
                 {
-                    react: generator.options.react,
+                    react: react?.isEnabled(),
                     tests: tests?.isEnabled(),
                     vite: vite?.isEnabled(),
                 }

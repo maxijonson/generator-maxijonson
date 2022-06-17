@@ -8,7 +8,7 @@ export default class MantineRTE extends Feature {
     }
 
     @bind
-    public apply(generator: Generator): void {
-        generator.addDependencies(["@mantine/rte"]);
+    public async apply(generator: Generator): Promise<void> {
+        await generator.addDependencies(["@mantine/rte"]);
     }
 }

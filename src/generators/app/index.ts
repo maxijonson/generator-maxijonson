@@ -24,6 +24,9 @@ import Lodash from "../../features/Lodash";
 import AppName from "../../prompts/AppName";
 import Features from "../../prompts/Features";
 import {
+    FEATURE_ORDER_GH,
+    FEATURE_ORDER_GIT,
+    FEATURE_ORDER_PACKAGEJSON,
     PROMPT_ORDER_APPNAME,
     PROMPT_ORDER_FEATURES,
 } from "../../utils/constants";
@@ -63,12 +66,15 @@ class GeneratorApp<
     async initializing() {
         this.featureService
             .setGenerator(this, path.join(__dirname, "templates"))
-            .addFeature(new Git(true), 1)
+            .addHiddenFeature(new TSConfig(true))
+            .addHiddenFeature(new TSIndex(true))
+            .addHiddenFeature(new PackageJson(true), FEATURE_ORDER_PACKAGEJSON)
+            .addFeature(new Git(true), FEATURE_ORDER_GIT)
             .addFeature(new GitIgnore(true))
             .addFeature(new GitAttributes(true))
             .addFeature(new ESLint(true))
             .addFeature(new Readme(true))
-            .addFeature(new Gh(), 0)
+            .addFeature(new Gh(), FEATURE_ORDER_GH)
             .addFeature(new DevContainer())
             .addFeature(new Env())
             .addFeature(new Lodash())
@@ -80,10 +86,7 @@ class GeneratorApp<
             .addFeature(new VSCodeLaunch())
             .addFeature(new VSCodeSettings())
             .addFeature(new I18next())
-            .addFeature(new GlobalDTs())
-            .addHiddenFeature(new TSConfig(true))
-            .addHiddenFeature(new TSIndex(true))
-            .addHiddenFeature(new PackageJson(true));
+            .addFeature(new GlobalDTs());
 
         this.promptService
             .setGenerator(this)

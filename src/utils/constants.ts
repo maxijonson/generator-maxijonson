@@ -2,3 +2,7 @@ export const PROMPT_ORDER_APPNAME = 0;
 export const PROMPT_ORDER_REACTFRAMEWORKS = 10;
 export const PROMPT_ORDER_REACTFRAMEWORK = 15;
 export const PROMPT_ORDER_FEATURES = 20;
+
+export const FEATURE_ORDER_GH = -1;
+export const FEATURE_ORDER_GIT = 0;
+export const FEATURE_ORDER_PACKAGEJSON = 1;

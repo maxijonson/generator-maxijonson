@@ -17,7 +17,6 @@ import FeatureService from "../services/FeatureService/FeatureService";
 import Framework from "../services/ReactFrameworkService/ReactFramework";
 import GeneratorReact from "../generators/react";
 import { PROMPT_ORDER_REACTFRAMEWORK } from "../utils/constants";
-import TSIndex from "../features/TSIndex";
 
 interface Answers {
     packages: (string | string[])[];
@@ -42,7 +41,7 @@ class Mantine extends Framework {
         );
         this.packagesFeatureService = new FeatureService(this.generator)
             .setGenerator(this.generator, sourceRoot)
-            .addFeature(new MantineCore(true))
+            .addHiddenFeature(new MantineCore(true))
             .addFeature(new MantineHooks(true))
             .addFeature(new MantineForm())
             .addFeature(new MantineDates())
@@ -59,8 +58,9 @@ class Mantine extends Framework {
 
         this.generator.featureService
             .setGenerator(this.generator, sourceRoot)
-            .addHiddenFeature(new MantineFramework(true))
-            .addHiddenFeature(new TSIndex());
+            .extend(this.packagesFeatureService)
+            .extend(this.bundlerFeatureService)
+            .addHiddenFeature(new MantineFramework(true));
 
         this.generator.promptService
             .addPrompt(

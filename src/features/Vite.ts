@@ -21,9 +21,11 @@ export default class Vite extends Feature {
         const i18next = getFeature(I18next);
 
         generator.packageJson.merge({
-            start: "vite serve src",
-            preview: "vite preview",
-            build: "npm-run-all clean build:esm build:cjs build:types && vite build",
+            scripts: {
+                start: "vite serve src",
+                preview: "vite preview",
+                build: "npm-run-all clean build:esm build:cjs build:types && vite build",
+            },
         });
 
         copyTpl(

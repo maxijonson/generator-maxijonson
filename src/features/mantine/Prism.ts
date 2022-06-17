@@ -8,7 +8,7 @@ export default class MantinePrism extends Feature {
     }
 
     @bind
-    public apply(generator: Generator): void {
-        generator.addDependencies(["@mantine/prism"]);
+    public async apply(generator: Generator): Promise<void> {
+        await generator.addDependencies(["@mantine/prism"]);
     }
 }

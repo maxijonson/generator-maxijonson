@@ -8,7 +8,7 @@ export default class MantineNotifications extends Feature {
     }
 
     @bind
-    public apply(generator: Generator): void {
-        generator.addDependencies(["@mantine/notifications"]);
+    public async apply(generator: Generator): Promise<void> {
+        await generator.addDependencies(["@mantine/notifications"]);
     }
 }

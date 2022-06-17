@@ -41,6 +41,15 @@ export default class FeatureService extends GeneratorService {
     }
 
     @bind
+    public extend(service: FeatureService, hidden = false): this {
+        const add = hidden ? this.addHiddenFeature : this.addFeature;
+        for (const feature of service.getFeatures()) {
+            add(feature);
+        }
+        return this;
+    }
+
+    @bind
     public setFeatureEnabled(featureId: string, enabled: boolean) {
         const feature = this.getFeatureById(featureId);
         if (feature) feature.setEnabled(enabled);
@@ -73,14 +82,15 @@ export default class FeatureService extends GeneratorService {
     @bind
     public async applyFeatures() {
         const sourceRoot = this.generator.sourceRoot();
-        await Promise.all(
-            this.getEnabledFeatures().map((f) => {
-                const feature = this.features[f.getId()];
-                if (!feature) return;
-                this.generator.sourceRoot(feature.sourceRoot);
-                return f.apply(this.generator, this.getFeatureByClass);
-            })
-        );
+
+        // Do not Promise.all, execution order is important
+        for (const f of this.getEnabledFeatures()) {
+            const feature = this.features[f.getId()];
+            if (!feature) continue;
+            this.generator.sourceRoot(feature.sourceRoot);
+            await f.apply(this.generator, this.getFeatureByClass);
+        }
+
         this.generator.sourceRoot(sourceRoot);
     }
 

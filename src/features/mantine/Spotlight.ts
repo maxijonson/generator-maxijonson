@@ -8,7 +8,7 @@ export default class MantineSpotlight extends Feature {
     }
 
     @bind
-    public apply(generator: Generator): void {
-        generator.addDependencies(["@mantine/spotlight"]);
+    public async apply(generator: Generator): Promise<void> {
+        await generator.addDependencies(["@mantine/spotlight"]);
     }
 }

@@ -8,6 +8,7 @@ import React from "../../features/React";
 import ReactRouterDom from "../../features/ReactRouterDom";
 import { PROMPT_ORDER_REACTFRAMEWORKS } from "../../utils/constants";
 import Heroku from "../../features/Heroku";
+import TSIndex from "../../features/TSIndex";
 
 interface Options {
     framework?: string;
@@ -31,9 +32,10 @@ class GeneratorReact extends GeneratorApp<Options> {
         await super.initializing();
         this.featureService
             .setGenerator(this, path.join(__dirname, "templates", "Common"))
+            .addHiddenFeature(new React(true))
+            .addHiddenFeature(new TSIndex())
             .addFeature(new ReactRouterDom())
-            .addFeature(new Heroku())
-            .addHiddenFeature(new React(true));
+            .addFeature(new Heroku());
 
         this.frameworkService
             .setGenerator(this)

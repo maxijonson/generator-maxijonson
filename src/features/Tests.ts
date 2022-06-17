@@ -18,18 +18,6 @@ export default class Tests extends Feature {
 
         copyTpl(
             generator,
-            generator.templatePath("src/index.test.ts"),
-            generator.destinationPath("src/index.test.ts")
-        );
-
-        copyTpl(
-            generator,
-            generator.templatePath("src/config/setupTests.ts"),
-            generator.destinationPath("src/config/setupTests.ts")
-        );
-
-        copyTpl(
-            generator,
             generator.templatePath("jest.config.ts"),
             generator.destinationPath("jest.config.ts"),
             { react: react?.isEnabled() }
@@ -37,12 +25,18 @@ export default class Tests extends Feature {
 
         await generator.addDevDependencies(["jest", "@types/jest", "ts-jest"]);
 
-        if (react?.isEnabled()) {
-            await generator.addDevDependencies([
-                "@testing-library/react",
-                "@testing-library/jest-dom",
-                "@types/testing-library__jest-dom",
-            ]);
+        if (!react?.isEnabled()) {
+            copyTpl(
+                generator,
+                generator.templatePath("src/index.test.ts"),
+                generator.destinationPath("src/index.test.ts")
+            );
+
+            copyTpl(
+                generator,
+                generator.templatePath("src/config/setupTests.ts"),
+                generator.destinationPath("src/config/setupTests.ts")
+            );
         }
     }
 }

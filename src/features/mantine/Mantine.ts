@@ -3,8 +3,8 @@ import bind from "../../decorators/bind";
 import Feature, { GetFeature } from "../../services/FeatureService/Feature";
 import copyTpl from "../../utils/copyTpl";
 import I18next from "../I18next";
-import Tests from "../Tests";
-import MantineCore from "./Core";
+import ReactRouterDom from "../ReactRouterDom";
+import MantineHooks from "./Hooks";
 
 export default class Mantine extends Feature {
     constructor(enabled = false, available = true) {
@@ -13,9 +13,9 @@ export default class Mantine extends Feature {
 
     @bind
     public apply(generator: Generator, getFeature: GetFeature): void {
-        const core = getFeature(MantineCore);
         const i18next = getFeature(I18next);
-        const tests = getFeature(Tests);
+        const router = getFeature(ReactRouterDom);
+        const hooks = getFeature(MantineHooks);
 
         copyTpl(
             generator,
@@ -29,29 +29,42 @@ export default class Mantine extends Feature {
             generator.templatePath("src/index.tsx"),
             generator.destinationPath("src/index.tsx"),
             {
-                core: core?.isEnabled(),
                 i18next: i18next?.isEnabled(),
+                hooks: hooks?.isEnabled(),
             }
         );
 
         copyTpl(
             generator,
-            generator.templatePath("src/components/App/App.tsx"),
-            generator.destinationPath("src/components/App/App.tsx")
+            generator.templatePath("src/components/App/index.tsx"),
+            generator.destinationPath("src/components/App/index.tsx"),
+            { router: router?.isEnabled() }
         );
 
-        if (tests?.isEnabled()) {
-            copyTpl(
-                generator,
-                generator.templatePath("src/components/App/App.test.tsx"),
-                generator.destinationPath("src/components/App/App.test.tsx")
-            );
+        copyTpl(
+            generator,
+            generator.templatePath("src/components/GlobalStyles/index.tsx"),
+            generator.destinationPath("src/components/GlobalStyles/index.tsx")
+        );
 
-            copyTpl(
-                generator,
-                generator.templatePath("src/config/setupTests.ts"),
-                generator.destinationPath("src/config/setupTests.ts")
-            );
-        }
+        copyTpl(
+            generator,
+            generator.templatePath("src/components/Fonts/index.tsx"),
+            generator.destinationPath("src/components/Fonts/index.tsx")
+        );
+
+        copyTpl(
+            generator,
+            generator.templatePath("src/components/DebugTools/index.tsx"),
+            generator.destinationPath("src/components/DebugTools/index.tsx"),
+            { i18next: i18next?.isEnabled() }
+        );
+
+        copyTpl(
+            generator,
+            generator.templatePath("src/pages/Home/index.tsx"),
+            generator.destinationPath("src/pages/Home/index.tsx"),
+            { i18next: i18next?.isEnabled() }
+        );
     }
 }

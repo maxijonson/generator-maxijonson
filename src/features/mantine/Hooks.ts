@@ -8,7 +8,7 @@ export default class MantineHooks extends Feature {
     }
 
     @bind
-    public apply(generator: Generator): void {
-        generator.addDependencies(["@mantine/hooks"]);
+    public async apply(generator: Generator): Promise<void> {
+        await generator.addDependencies(["@mantine/hooks"]);
     }
 }

@@ -8,7 +8,7 @@ export default class MantineDates extends Feature {
     }
 
     @bind
-    public apply(generator: Generator): void {
-        generator.addDependencies(["@mantine/dates", "dayjs"]);
+    public async apply(generator: Generator): Promise<void> {
+        await generator.addDependencies(["@mantine/dates", "dayjs"]);
     }
 }
