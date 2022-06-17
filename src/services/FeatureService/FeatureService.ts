@@ -1,6 +1,7 @@
 import _ from "lodash";
 import Generator from "yeoman-generator";
 import bind from "../../decorators/bind";
+import { FEATURE_ORDER_UNORDERED } from "../../utils/constants";
 import GeneratorService from "../GeneratorService/GeneratorService";
 import Feature from "./Feature";
 
@@ -25,7 +26,11 @@ export default class FeatureService extends GeneratorService {
     }
 
     @bind
-    public addFeature(feature: Feature, order = 9999, hidden = false) {
+    public addFeature(
+        feature: Feature,
+        order = FEATURE_ORDER_UNORDERED,
+        hidden = false
+    ) {
         this.features[feature.getId()] = {
             feature,
             sourceRoot: this.generator.sourceRoot(),
@@ -36,7 +41,7 @@ export default class FeatureService extends GeneratorService {
     }
 
     @bind
-    public addHiddenFeature(feature: Feature, order = 9999) {
+    public addHiddenFeature(feature: Feature, order = FEATURE_ORDER_UNORDERED) {
         return this.addFeature(feature, order, true);
     }
 

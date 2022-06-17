@@ -6,3 +6,4 @@ export const PROMPT_ORDER_FEATURES = 20;
 export const FEATURE_ORDER_GH = -1;
 export const FEATURE_ORDER_GIT = 0;
 export const FEATURE_ORDER_PACKAGEJSON = 1;
+export const FEATURE_ORDER_UNORDERED = 1000000;
