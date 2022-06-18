@@ -6,15 +6,21 @@ import ReactFrameworks from "../../prompts/ReactFrameworks";
 import Mantine from "../../react-frameworks/Mantine";
 import React from "../../features/React";
 import ReactRouterDom from "../../features/ReactRouterDom";
-import { PROMPT_ORDER_REACTFRAMEWORKS } from "../../utils/constants";
+import {
+    PROMPT_ORDER_REACTFEATURES,
+    PROMPT_ORDER_REACTFRAMEWORKS,
+} from "../../utils/constants";
 import Heroku from "../../features/Heroku";
 import TSIndex from "../../features/TSIndex";
+import FeatureService from "../../services/FeatureService/FeatureService";
+import Features from "../../prompts/Features";
 
 interface Options {
     framework?: string;
 }
 
 class GeneratorReact extends GeneratorApp<Options> {
+    public reactFeatureService: FeatureService = new FeatureService(this);
     public frameworkService: ReactFrameworkService = new ReactFrameworkService(
         this
     );
@@ -30,7 +36,7 @@ class GeneratorReact extends GeneratorApp<Options> {
     /** Your initialization methods (checking current project state, getting configs, etc) */
     override async initializing() {
         await super.initializing();
-        this.featureService
+        this.reactFeatureService
             .setGenerator(this, path.join(__dirname, "templates", "Common"))
             .addHiddenFeature(new React(true))
             .addHiddenFeature(new TSIndex())
@@ -46,7 +52,18 @@ class GeneratorReact extends GeneratorApp<Options> {
             .addPrompt(
                 new ReactFrameworks(this.frameworkService),
                 PROMPT_ORDER_REACTFRAMEWORKS
+            )
+            .addPrompt(
+                new Features(
+                    this.reactFeatureService,
+                    "checkbox",
+                    "react-features",
+                    "Which React features do you want to use?"
+                ),
+                PROMPT_ORDER_REACTFEATURES
             );
+
+        this.featureService.extend(this.reactFeatureService, true);
     }
 
     /** Where you prompt users for options (where you'd call `this.prompt()`) */

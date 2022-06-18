@@ -13,7 +13,7 @@ export default class Features extends Prompt<Feature[]> {
         private featureService: FeatureService,
         private type: "checkbox" | "list" = "checkbox",
         id = "features",
-        message = "What features would you like?"
+        message = "Which features would you like?"
     ) {
         super(id, message);
     }
