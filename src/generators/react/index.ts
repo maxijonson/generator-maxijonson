@@ -8,22 +8,25 @@ import React from "../../features/React";
 import ReactRouterDom from "../../features/ReactRouterDom";
 import {
     PROMPT_ORDER_REACTFEATURES,
+    PROMPT_ORDER_REACTBUNDLER,
     PROMPT_ORDER_REACTFRAMEWORKS,
 } from "../../utils/constants";
 import Heroku from "../../features/Heroku";
 import TSIndex from "../../features/TSIndex";
 import FeatureService from "../../services/FeatureService/FeatureService";
 import Features from "../../prompts/Features";
+import Vite from "../../features/Vite";
 
 interface Options {
     framework?: string;
 }
 
 class GeneratorReact extends GeneratorApp<Options> {
-    public reactFeatureService: FeatureService = new FeatureService(this);
     public frameworkService: ReactFrameworkService = new ReactFrameworkService(
         this
     );
+    private reactFeatureService: FeatureService = new FeatureService(this);
+    private bundlerFeatureService: FeatureService = new FeatureService(this);
 
     constructor(
         args: ConstructorParameters<typeof Generator>[0],
@@ -47,11 +50,24 @@ class GeneratorReact extends GeneratorApp<Options> {
             .setGenerator(this)
             .addFramework(new Mantine(this));
 
+        this.bundlerFeatureService
+            .setGenerator(this, path.join(__dirname, "templates", "Common"))
+            .addFeature(new Vite());
+
         this.promptService
             .setGenerator(this)
             .addPrompt(
                 new ReactFrameworks(this.frameworkService),
                 PROMPT_ORDER_REACTFRAMEWORKS
+            )
+            .addPrompt(
+                new Features(
+                    this.bundlerFeatureService,
+                    "list",
+                    "react-bundler",
+                    "Which bundler do you want to use?"
+                ),
+                PROMPT_ORDER_REACTBUNDLER
             )
             .addPrompt(
                 new Features(
@@ -63,7 +79,9 @@ class GeneratorReact extends GeneratorApp<Options> {
                 PROMPT_ORDER_REACTFEATURES
             );
 
-        this.featureService.extend(this.reactFeatureService, true);
+        this.featureService
+            .extend(this.reactFeatureService, true)
+            .extend(this.bundlerFeatureService, true);
     }
 
     /** Where you prompt users for options (where you'd call `this.prompt()`) */
