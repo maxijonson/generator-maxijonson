@@ -82,11 +82,6 @@ class Mantine extends Framework {
                 PROMPT_ORDER_REACTFRAMEWORK
             );
     }
-
-    override async writing(): Promise<void> {
-        await this.bundlerFeatureService.applyFeatures();
-        await this.packagesFeatureService.applyFeatures();
-    }
 }
 
 export default Mantine;
