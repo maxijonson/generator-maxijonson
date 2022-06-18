@@ -26,12 +26,15 @@ export default class FeatureService extends GeneratorService {
     }
 
     @bind
-    public extend(generatorService: FeatureService, hidden?: boolean): this {
+    public extend(
+        generatorService: FeatureService,
+        forceHidden?: boolean
+    ): this {
         this.features = {
             ...this.features,
             ..._.mapValues(generatorService.features, (featureConfig) => ({
                 ...featureConfig,
-                hidden: hidden ?? featureConfig.hidden,
+                hidden: forceHidden ?? featureConfig.hidden,
             })),
         };
         return this;

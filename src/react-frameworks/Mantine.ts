@@ -58,8 +58,8 @@ class Mantine extends Framework {
 
         this.generator.featureService
             .setGenerator(this.generator, sourceRoot)
-            .extend(this.packagesFeatureService)
-            .extend(this.bundlerFeatureService)
+            .extend(this.packagesFeatureService, true)
+            .extend(this.bundlerFeatureService, true)
             .addHiddenFeature(new MantineFramework(true));
 
         this.generator.promptService
