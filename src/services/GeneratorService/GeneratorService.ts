@@ -12,4 +12,6 @@ export default abstract class GeneratorService {
         }
         return this;
     }
+
+    public abstract extend(generatorService: GeneratorService): this;
 }

@@ -15,6 +15,15 @@ export default class ReactFrameworkService extends GeneratorService {
     }
 
     @bind
+    public extend(generatorService: ReactFrameworkService): this {
+        this.frameworks = {
+            ...this.frameworks,
+            ...generatorService.frameworks,
+        };
+        return this;
+    }
+
+    @bind
     public addFramework(framework: Framework, override = true) {
         if (this.frameworks[framework.getId()] && !override) return this;
         this.frameworks[framework.getId()] = framework;

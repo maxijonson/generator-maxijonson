@@ -26,6 +26,18 @@ export default class FeatureService extends GeneratorService {
     }
 
     @bind
+    public extend(generatorService: FeatureService, hidden?: boolean): this {
+        this.features = {
+            ...this.features,
+            ..._.mapValues(generatorService.features, (featureConfig) => ({
+                ...featureConfig,
+                hidden: hidden ?? featureConfig.hidden,
+            })),
+        };
+        return this;
+    }
+
+    @bind
     public addFeature(
         feature: Feature,
         order = FEATURE_ORDER_UNORDERED,
@@ -43,15 +55,6 @@ export default class FeatureService extends GeneratorService {
     @bind
     public addHiddenFeature(feature: Feature, order = FEATURE_ORDER_UNORDERED) {
         return this.addFeature(feature, order, true);
-    }
-
-    @bind
-    public extend(service: FeatureService, hidden = false): this {
-        const add = hidden ? this.addHiddenFeature : this.addFeature;
-        for (const feature of service.getFeatures()) {
-            add(feature);
-        }
-        return this;
     }
 
     @bind
