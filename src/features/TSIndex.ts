@@ -2,8 +2,8 @@ import Generator from "yeoman-generator";
 import bind from "../decorators/bind";
 import Feature, { GetFeature } from "../services/FeatureService/Feature";
 import copyTpl from "../utils/copyTpl";
-import Inquirer from "./Inquirer";
-import Yargs from "./Yargs";
+import Inquirer from "./cli/Inquirer";
+import Yargs from "./cli/Yargs";
 
 export default class TSIndex extends Feature {
     constructor(enabled = false, available = true) {

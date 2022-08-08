@@ -20,7 +20,6 @@ import TSConfig from "../../features/TSConfig";
 import DevContainer from "../../features/DevContainer";
 import ESLint from "../../features/ESLint";
 import TSIndex from "../../features/TSIndex";
-import Lodash from "../../features/Lodash";
 import AppName from "../../prompts/AppName";
 import Features from "../../prompts/Features";
 import {
@@ -77,7 +76,6 @@ class GeneratorApp<
             .addFeature(new Gh(), FEATURE_ORDER_GH)
             .addFeature(new DevContainer())
             .addFeature(new Env())
-            .addFeature(new Lodash())
             .addFeature(new Prettier())
             .addFeature(new Tests())
             .addFeature(new License())

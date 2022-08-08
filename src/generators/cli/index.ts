@@ -1,8 +1,8 @@
 import Generator from "yeoman-generator";
 import path from "path";
-import Inquirer from "../../features/Inquirer";
+import Inquirer from "../../features/cli/Inquirer";
 import TSIndex from "../../features/TSIndex";
-import Yargs from "../../features/Yargs";
+import Yargs from "../../features/cli/Yargs";
 import GeneratorApp, { GeneratorOptions } from "../app";
 
 class GeneratorCli extends GeneratorApp {

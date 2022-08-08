@@ -2,7 +2,7 @@ import Generator from "yeoman-generator";
 import bind from "../decorators/bind";
 import Feature, { GetFeature } from "../services/FeatureService/Feature";
 import copyTpl from "../utils/copyTpl";
-import React from "./React";
+import React from "./react/React";
 
 export default class GlobalDTs extends Feature {
     constructor(enabled = false, available = true) {

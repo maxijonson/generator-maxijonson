@@ -1,9 +1,9 @@
 import Generator from "yeoman-generator";
 import fs from "fs-extra";
-import bind from "../decorators/bind";
-import Feature, { GetFeature } from "../services/FeatureService/Feature";
-import copyTpl from "../utils/copyTpl";
-import Tests from "./Tests";
+import bind from "../../decorators/bind";
+import Feature, { GetFeature } from "../../services/FeatureService/Feature";
+import copyTpl from "../../utils/copyTpl";
+import Tests from "../Tests";
 
 export default class React extends Feature {
     constructor(enabled = false, available = true) {

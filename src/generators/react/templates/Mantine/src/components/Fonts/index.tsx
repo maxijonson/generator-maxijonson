@@ -1,4 +1,4 @@
-import React from "react";
+import React, { CSSProperties } from "react";
 import { Global } from "@mantine/core";
 
 // Example Font
@@ -13,7 +13,11 @@ import { Global } from "@mantine/core";
 // import ExampleFontBlack from "../../assets/fonts/ExampleFont/ExampleFont-Black.ttf";
 // import ExampleFontBlackItalic from "../../assets/fonts/ExampleFont/ExampleFont-BlackItalic.ttf";
 
-type Font = [font: any, weight: number | string, style: string];
+type Font = [
+    font: CSSProperties["fontFamily"],
+    weight: CSSProperties["fontWeight"],
+    style: CSSProperties["fontStyle"]
+];
 
 export default () => {
     // const exampleFont = React.useMemo<Font[]>(() => {

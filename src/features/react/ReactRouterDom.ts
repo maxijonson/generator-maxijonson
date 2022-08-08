@@ -1,6 +1,6 @@
 import Generator from "yeoman-generator";
-import bind from "../decorators/bind";
-import Feature from "../services/FeatureService/Feature";
+import bind from "../../decorators/bind";
+import Feature from "../../services/FeatureService/Feature";
 
 export default class ReactRouterDom extends Feature {
     constructor(enabled = false, available = true) {

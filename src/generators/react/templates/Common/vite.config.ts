@@ -3,7 +3,7 @@ import { imagetools } from "vite-imagetools";
 import wc from "wildcard-match";
 import { resolve } from "path";
 import { dependencies } from "./package.json";
-<% if (react) { %>import react from "@vitejs/plugin-react";<% } %>
+import react from "@vitejs/plugin-react";
 
 /**
  * an array file directives to override the default Vite compilation params for specific files.
@@ -17,7 +17,7 @@ import { dependencies } from "./package.json";
  * Dependencies to be chunked together instead of individually.
  */
  const MANUAL_CHUNKS: { [chunkName: string]: (keyof typeof dependencies)[] } = {
-    <% if (react) { %>react: ["react", "react-dom", "react-router-dom"],<% } %>
+    react: ["react", "react-dom", "react-router-dom"],
     <% if (mantine) { %>mantine: ["@mantine/core", "@mantine/hooks"],<% } %>
     <% if (i18next) { %>i18next: ["i18next","i18next-browser-languagedetector","i18next-resources-to-backend","react-i18next",],<% } %>
 };
@@ -54,7 +54,7 @@ export default defineConfig({
                 });
             },
         }),
-        <% if (react) { %>react(),<% } %>
+        react(),
     ],
     root: "src",
     build: {

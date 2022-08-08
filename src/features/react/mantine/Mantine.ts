@@ -1,8 +1,8 @@
 import Generator from "yeoman-generator";
-import bind from "../../decorators/bind";
-import Feature, { GetFeature } from "../../services/FeatureService/Feature";
-import copyTpl from "../../utils/copyTpl";
-import I18next from "../I18next";
+import bind from "../../../decorators/bind";
+import Feature, { GetFeature } from "../../../services/FeatureService/Feature";
+import copyTpl from "../../../utils/copyTpl";
+import I18next from "../../I18next";
 import ReactRouterDom from "../ReactRouterDom";
 import MantineHooks from "./Hooks";
 

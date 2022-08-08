@@ -4,8 +4,8 @@ import GeneratorApp, { GeneratorOptions } from "../app";
 import ReactFrameworkService from "../../services/ReactFrameworkService/ReactFrameworkService";
 import ReactFrameworks from "../../prompts/ReactFrameworks";
 import Mantine from "../../react-frameworks/Mantine";
-import React from "../../features/React";
-import ReactRouterDom from "../../features/ReactRouterDom";
+import React from "../../features/react/React";
+import ReactRouterDom from "../../features/react/ReactRouterDom";
 import {
     PROMPT_ORDER_REACTFEATURES,
     PROMPT_ORDER_REACTBUNDLER,
@@ -15,7 +15,7 @@ import Heroku from "../../features/Heroku";
 import TSIndex from "../../features/TSIndex";
 import FeatureService from "../../services/FeatureService/FeatureService";
 import Features from "../../prompts/Features";
-import Vite from "../../features/Vite";
+import Vite from "../../features/react/Vite";
 
 interface Options {
     framework?: string;
@@ -42,8 +42,8 @@ class GeneratorReact extends GeneratorApp<Options> {
         this.reactFeatureService
             .setGenerator(this, path.join(__dirname, "templates", "Common"))
             .addHiddenFeature(new React(true))
+            .addHiddenFeature(new ReactRouterDom(true))
             .addHiddenFeature(new TSIndex())
-            .addFeature(new ReactRouterDom())
             .addFeature(new Heroku());
 
         this.frameworkService

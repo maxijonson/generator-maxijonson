@@ -3,7 +3,7 @@ import bind from "../decorators/bind";
 import Feature, { GetFeature } from "../services/FeatureService/Feature";
 import copyTpl from "../utils/copyTpl";
 import Prettier from "./Prettier";
-import React from "./React";
+import React from "./react/React";
 import Tests from "./Tests";
 
 export default class ESLint extends Feature {
