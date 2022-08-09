@@ -2,3 +2,5 @@ node_modules
 dist
 <% if (settings || launch) { %>.vscode<% } %>
 <% if (tests) { %>coverage<% } %>
+<% if (dotenv) { %>.env<% } %>
+<% if (express) { %>src/tmp<% } %>

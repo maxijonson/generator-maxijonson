@@ -1,6 +1,9 @@
 {
+
+    "ignore": [".git", "node_modules", "dist", "src/tmp"],
     "watch": ["src"],
-    "exec": "npm start",
+    <% if (!express) { %>"exec": "npm start",<% } %>
+    <% if (express) { %>"exec": "npm run dev",<% } %>
     "ext": "js,ts",
     <% if (devcontainer) { %>"legacyWatch": true<% } %>
 }

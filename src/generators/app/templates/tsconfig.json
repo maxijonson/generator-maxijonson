@@ -1,3 +1,8 @@
 {
+    <% if (!express) { %>
     "extends": "./tsconfig.cjs.json"
+    <% } %>
+    <% if (express) { %>
+    "extends": "./tsconfig.esm.json"
+    <% } %>
 }

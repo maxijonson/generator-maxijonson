@@ -56,6 +56,14 @@ export default class FeatureService extends GeneratorService {
     }
 
     @bind
+    public removeFeature<T extends Feature>(featureClass: FeatureClass<T>) {
+        const feature = this.getFeatureByClass(featureClass);
+        if (!feature) return this;
+        delete this.features[feature.getId()];
+        return this;
+    }
+
+    @bind
     public addHiddenFeature(feature: Feature, order = FEATURE_ORDER_UNORDERED) {
         return this.addFeature(feature, order, true);
     }
