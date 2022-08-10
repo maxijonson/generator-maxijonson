@@ -49,7 +49,7 @@ export default class Express extends Feature {
         });
         await generator.addDevDependencies(["@types/express"]);
 
-        const scripts = {
+        const scripts: { [script: string]: string } = {
             start: "node dist/esm/index.js",
             dev: "ts-node -P tsconfig.esm.json src/index.ts",
             prod: "npm run build && npm run start",
@@ -58,6 +58,13 @@ export default class Express extends Feature {
 
         if (pm2?.isEnabled()) {
             scripts.start = "pm2-runtime start pm2.config.cjs --env production";
+        } else {
+            scripts["build:esm"] =
+                "ttsc -p tsconfig.prod.json && cp .build/package.esm.json dist/esm/package.json";
+            await generator.addDevDependencies([
+                "ttypescript",
+                "typescript-transform-extensions",
+            ]);
         }
 
         generator.packageJson.merge({

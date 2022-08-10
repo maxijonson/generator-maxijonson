@@ -6,6 +6,7 @@ import React from "./react/React";
 import Tests from "./Tests";
 import Vite from "./react/Vite";
 import Express from "./express/Express";
+import PM2 from "./express/PM2";
 
 export default class TSConfig extends Feature {
     constructor(enabled = false, available = true) {
@@ -18,6 +19,7 @@ export default class TSConfig extends Feature {
         const vite = getFeature(Vite);
         const react = getFeature(React);
         const express = getFeature(Express);
+        const pm2 = getFeature(PM2);
 
         [
             "tsconfig.base.json",
@@ -36,6 +38,7 @@ export default class TSConfig extends Feature {
                     tests: tests?.isEnabled(),
                     vite: vite?.isEnabled(),
                     express: express?.isEnabled(),
+                    pm2: pm2?.isEnabled(),
                 }
             );
         });
