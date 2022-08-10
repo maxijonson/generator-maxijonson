@@ -2,6 +2,7 @@ import Generator from "yeoman-generator";
 import bind from "../decorators/bind";
 import Feature, { GetFeature } from "../services/FeatureService/Feature";
 import copyTpl from "../utils/copyTpl";
+import Express from "./express/Express";
 import Prettier from "./Prettier";
 import React from "./react/React";
 import Tests from "./Tests";
@@ -19,6 +20,7 @@ export default class ESLint extends Feature {
         const prettier = getFeature(Prettier);
         const react = getFeature(React);
         const tests = getFeature(Tests);
+        const express = getFeature(Express);
 
         copyTpl(
             generator,
@@ -27,6 +29,7 @@ export default class ESLint extends Feature {
             {
                 prettier: prettier?.isEnabled(),
                 react: react?.isEnabled(),
+                express: express?.isEnabled(),
             }
         );
 

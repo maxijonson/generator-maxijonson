@@ -25,7 +25,8 @@
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "project": "./tsconfig.cjs.json",
+        <% if (!express) { %>"project": "./tsconfig.cjs.json", <% } %>
+        <% if (express) { %>"project": "./tsconfig.esm.json", <% } %>
         "sourceType": "module",
         "tsconfigRootDir": "./",
         "extraFileExtensions": [".json"],
